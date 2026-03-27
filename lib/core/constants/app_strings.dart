@@ -1,4 +1,25 @@
 class AppStrings {
+
+
+  // Login
+  static const String loginTitle = 'Welcome Back!';
+  static const String loginSubtitle = 'welcome back, we missed you';
+  static const String forgotPassword = 'Forgot Password?';
+  static const String signIn = 'Sign In';
+  static const String dontHaveAccount = "Don't have an account?";
+
+  // Register
+  static const String registerTitle = 'Create Account';
+  static const String registerSubtitle = 'join us and start your journey';
+  static const String signUp = 'Sign Up';
+  static const String alreadyHaveAccount = 'Already have an account?';
+
+  // Validation & Helpers
+  static const String emailHint = 'email@example.com';
+  static const String passwordHint = '••••••••';
+  static const String confirmPasswordHint = '••••••••';
+  static const String passwordHintLabel = r'💡 Must have: A-Z · a-z · 0-9 · special char (!@#$%)';
+
   //  Brand
   static const String appName = 'AIGENDA';
 
@@ -16,9 +37,7 @@ class AppStrings {
   //  Auth — Login
   static const String welcomeBack         = 'Welcome Back!';
   static const String welcomeBackSubtitle = 'welcome back we missed you';
-  static const String signIn              = 'Sign in';
-  static const String signUp              = 'Sign up';
-  static const String forgotPassword      = 'Forgot Password?';
+
   static const String orContinueWith      = 'Or continue with';
   static const String orSignUpWith        = 'Or sign up with';
 

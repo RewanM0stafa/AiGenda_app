@@ -16,9 +16,9 @@ class RegisterRequest {
   });
 
   Map<String, dynamic> toJson() => {
-    ApiKeys.firstName: firstName,
-    ApiKeys.lastName: lastName,
-    ApiKeys.email: email,
+    ApiKeys.firstName: firstName.trim(),
+    ApiKeys.lastName: lastName.trim(),
+    ApiKeys.email: email.trim().toLowerCase(),
     ApiKeys.password: password,
     ApiKeys.confirmPassword: confirmPassword,
   };

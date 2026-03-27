@@ -8,4 +8,7 @@ class RouteNames {
   static const String checkEmail = '/check-email';
   static const String enterCode = '/enter-code';
   static const String home = '/home';
+  static const String profile        = '/profile';
+  static const String editProfile    = '/profile/edit';
+  static const String changePassword = '/profile/change-password';
 }

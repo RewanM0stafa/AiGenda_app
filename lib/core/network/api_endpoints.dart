@@ -22,4 +22,16 @@ class ApiEndpoints {
   static const String resetPassword = "/api/Auth/reset-password";  // ( put )
 
 
+  // Profile / Me
+  static const String me = '/me';
+  static const String updateMe = '/me';
+  static const String changePassword = '/me/change-password';
+  static const String changeEmail = '/me/change-email';
+  static const String confirmChangeEmail = '/me/confirm-change-email';
+
+  // Avatar
+  static const String uploadAvatar = '/me/avatar';
+  static const String getAvatar = '/me/avatar';
+  static const String deleteAvatar = '/me/avatar';
+
 }

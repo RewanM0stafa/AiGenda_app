@@ -9,7 +9,7 @@ import 'package:ajenda_app/core/network/api_keys.dart';
 class LoginResponse {
   final String id;
   final String firstName;
-  final String secondName;
+  final String lastName;
   final String email;
   final String token;
   final String refreshToken;
@@ -19,7 +19,7 @@ class LoginResponse {
   LoginResponse({
     required this.id,
     required this.firstName,
-    required this.secondName,
+    required this.lastName,
     required this.email,
     required this.token,
     required this.refreshToken,
@@ -31,7 +31,7 @@ class LoginResponse {
     return LoginResponse(
       id: json[ApiKeys.id] ?? '',
       firstName: json[ApiKeys.firstName] ?? '',
-      secondName: json[ApiKeys.secondName] ?? '',
+      lastName: json[ApiKeys.lastName] ?? '',
       email: json[ApiKeys.email] ?? '',
       token: json[ApiKeys.token] ?? '',
       refreshToken: json[ApiKeys.refreshToken] ?? '',

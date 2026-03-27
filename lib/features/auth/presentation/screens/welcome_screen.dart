@@ -1,70 +1,110 @@
-/*import 'package:ajenda_app/config/routes/route_names.dart';
+/*
+import 'package:ajenda_app/features/auth/presentation/screens/register_screen.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../config/dependency_injection.dart';
+import '../../logic/auth_cubit/auth_cubit.dart';
+import 'login_screen.dart';
 
-import 'package:ajenda_app/core/constants/app_colors.dart';
-import 'package:ajenda_app/core/constants/app_strings.dart';
-import 'package:ajenda_app/core/constants/app_text_styles.dart';
-import 'package:ajenda_app/core/core_widgets/gradient_button.dart';
-import 'package:ajenda_app/core/core_widgets/gradient_text.dart';
-import 'package:ajenda_app/core/utils/navigation_helper.dart';
-import 'package:ajenda_app/features/auth/presentation/widgets/auth_form_card.dart';
-import 'package:flutter/material.dart';
-import 'package:ajenda_app/features/auth/presentation/widgets/auth_header.dart';
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({super.key});
 
-/// Welcome / Home screen: "Light Up Your Mind ... With AIGENDA" and Get Started.
-class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({super.key});
+  @override
+  State<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends State<AuthScreen>
+    with SingleTickerProviderStateMixin {
+  bool _isSignIn = true;
+  late AnimationController _switchCtrl;
+  late Animation<double> _fadeAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _switchCtrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 280));
+    _fadeAnim =
+        CurvedAnimation(parent: _switchCtrl, curve: Curves.easeInOut);
+    _switchCtrl.value = 1.0;
+  }
+
+  @override
+  void dispose() {
+    _switchCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _switchView(bool toSignIn) async {
+    await _switchCtrl.reverse();
+    setState(() => _isSignIn = toSignIn);
+    _switchCtrl.forward();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const AuthHeader(
-                title: '',
-                showLogoImage: true,
-                showAppNameBelowLogo: true,
-                titleIsGradient: false,
-              ),
-              const SizedBox(height: 24),
-              AuthFormCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      AppStrings.welcomeTagline,
-                      style: AppTextStyles.authCardTitle,
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 8),
-                    const GradientText(
-                      text: AppStrings.welcomeTaglineWithApp,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 32),
-                    GradientButton(
-                      text: AppStrings.getStarted,
-                      onPressed: () {
-                        navigateTo(context, RouteNames.login);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
+    return BlocProvider(
+      create: (_) => getIt<AuthCubit>(),
+      child: FadeTransition(
+        opacity: _fadeAnim,
+        child: _isSignIn
+            ? LoginScreen(onSwitchToRegister: () => _switchView(false))
+            : RegisterScreen(onSwitchToLogin: () => _switchView(true)),
       ),
     );
   }
 }
-*/
+
+ */
+
+// lib/features/auth/views/auth_screen.dart
+import 'package:ajenda_app/features/auth/presentation/screens/register_screen.dart';
+import 'package:flutter/material.dart';
+
+import 'login_screen.dart';
+
+
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({super.key});
+  @override
+  State<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends State<AuthScreen>
+    with SingleTickerProviderStateMixin {
+  bool _isSignIn = true;
+  late AnimationController _switchCtrl;
+  late Animation<double> _fadeAnim;
+
+  @override
+  void initState() {
+    super.initState();
+    _switchCtrl = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 280));
+    _fadeAnim = CurvedAnimation(parent: _switchCtrl, curve: Curves.easeInOut);
+    _switchCtrl.value = 1.0;
+  }
+
+  void _switchView(bool toSignIn) async {
+    await _switchCtrl.reverse();
+    setState(() => _isSignIn = toSignIn);
+    _switchCtrl.forward();
+  }
+
+  @override
+  void dispose() {
+    _switchCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _fadeAnim,
+      child: _isSignIn
+          ? LoginScreen(onSwitchToSignUp: () => _switchView(false))
+          : RegisterScreen(onSwitchToSignIn: () => _switchView(true)),
+    );
+  }
+}

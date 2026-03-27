@@ -9,6 +9,10 @@ import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
 import '../../features/auth/presentation/screens/welcome_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
+import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
+import '../../features/profile/presentation/screens/change_password_screen.dart';
+import '../../features/profile/presentation/screens/edit_profile_screen.dart';
+import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../dependency_injection.dart';
 import 'route_names.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,25 +36,27 @@ final GoRouter appRouter = GoRouter(
     //   builder: (context, state) => const WelcomeScreen(),
     // ),
 
-    // ── Login ──
+    //  Login
     GoRoute(
       path: RouteNames.login,
       builder: (context, state) => BlocProvider(
-        create: (context) => getIt<AuthCubit>(),
-        child: const LoginScreen(),
+        create: (context) => getIt<AuthCubit>(), // حل مؤقت بس علشان أشوف ال ui
+        child: LoginScreen(onSwitchToSignUp: () {    context.go(RouteNames.register);  },),
       ),
     ),
 
-// ── Register ──
+    //  Register
     GoRoute(
       path: RouteNames.register,
       builder: (context, state) => BlocProvider(
         create: (context) => getIt<AuthCubit>(),
-        child: const RegisterScreen(),
+        child:  RegisterScreen(onSwitchToSignIn: () {    context.go(RouteNames.login);  },),
       ),
     ),
 
-// ── Confirm Email ──
+
+
+    //  Confirm Email
     GoRoute(
       path: RouteNames.confirmEmail,
       builder: (context, state) {
@@ -65,7 +71,7 @@ final GoRouter appRouter = GoRouter(
       },
     ),
 
-// ── Check Email ──
+    //  Check Email
     GoRoute(
       path: RouteNames.checkEmail,
       builder: (context, state) => BlocProvider(
@@ -74,17 +80,14 @@ final GoRouter appRouter = GoRouter(
       ),
     ),
 
-// ── Enter Code ──
+    //  Enter Code
     GoRoute(
       path: RouteNames.enterCode,
       builder: (context, state) {
         final extra = state.extra as Map<String, String>?;
         return BlocProvider(
           create: (context) => getIt<AuthCubit>(),
-          child: EnterCodeScreen(
-            email: extra?['email'],
-            code: extra?['code'],
-          ),
+          child: EnterCodeScreen(email: extra?['email'], code: extra?['code']),
         );
       },
     ),
@@ -93,5 +96,56 @@ final GoRouter appRouter = GoRouter(
       name: 'home',
       builder: (context, state) => const HomeScreen(),
     ),
+
+    //  Profile
+    GoRoute(
+      path: RouteNames.profile,
+      builder: (context, state) => BlocProvider(
+        create: (_) => getIt<ProfileCubit>(),
+        child: const ProfileScreen(),
+      ),
+    ),
+
+    GoRoute(
+      path: RouteNames.editProfile,
+      builder: (context, state) => BlocProvider.value(
+        // نفس الـ instance عشان نحتفظ بالداتا
+        value: getIt<ProfileCubit>(),
+        child: const EditProfileScreen(),
+      ),
+    ),
+
+    GoRoute(
+      path: RouteNames.changePassword,
+      builder: (context, state) => BlocProvider.value(
+        value: getIt<ProfileCubit>(),
+        child: const ChangePasswordScreen(),
+      ),
+    ),
   ],
 );
+/*
+GoRoute(
+  path: RouteNames.profile,
+  builder: (context, state) => BlocProvider.value(
+    value: getIt<ProfileCubit>()..load(),
+    child: const ProfileScreen(),
+  ),
+),
+
+GoRoute(
+  path: RouteNames.editProfile,
+  builder: (context, state) => BlocProvider.value(
+    value: getIt<ProfileCubit>(),
+    child: const EditProfileScreen(),
+  ),
+),
+
+GoRoute(
+  path: RouteNames.changePassword,
+  builder: (context, state) => BlocProvider.value(
+    value: getIt<ProfileCubit>(),
+    child: const ChangePasswordScreen(),
+  ),
+),
+ */

@@ -42,6 +42,8 @@ dependencies:
   get_it: ^9.2.1
   flutter_bloc: ^9.1.1
   app_links: ^6.4.1
+  image_picker: ^1.2.1
+  image_picker_windows: ^0.2.2 # ضيفي دي لو لسه الإيرور موجود بعد الرن
 
 dev_dependencies:
   flutter_test:

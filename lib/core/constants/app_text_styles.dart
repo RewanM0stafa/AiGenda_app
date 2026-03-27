@@ -3,6 +3,54 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class AppTextStyles {
+
+  static TextStyle get headerTitle => GoogleFonts.poppins(
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    color: Colors.black,
+  );
+  static TextStyle authLink = GoogleFonts.poppins(
+    fontSize: 13,
+    color: AppColors.primary,
+    fontWeight: FontWeight.w600,
+    decoration: TextDecoration.underline,
+  );
+
+  static TextStyle authHint = GoogleFonts.poppins(
+    fontSize: 13,
+    color: AppColors.textSecondary,
+  );
+
+  static TextStyle get hintStyle => GoogleFonts.poppins(
+    fontSize: 13,
+    color: AppColors.textSecondary,
+  );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // ── Logo ──
   static final TextStyle logoText = GoogleFonts.outfit(
     fontSize: 36,

@@ -3,7 +3,8 @@
 /* مودل استقبال الداتا الأجنبية من جهة السرفر  request model*/
 /* toJson factory */
 
-import 'package:ajenda_app/core/network/api_keys.dart';
+
+import '../../../../../core/network/api_keys.dart';
 
 class LoginRequest {
   final String email;
@@ -12,7 +13,7 @@ class LoginRequest {
   LoginRequest({required this.email, required this.password});
 
   Map<String, dynamic> toJson() => {
-    ApiKeys.email: email,
+    ApiKeys.email: email.trim().toLowerCase(),
     ApiKeys.password: password,
   };
 }
