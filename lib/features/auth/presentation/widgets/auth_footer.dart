@@ -24,12 +24,10 @@ class AuthFooter extends StatelessWidget {
           text: TextSpan(children: [
             TextSpan(
               text: '$leadingText  ',
-              // استخدمنا الـ hintStyle لأنه واخد نفس اللون الرمادي بتاعك
               style: AppTextStyles.hintStyle,
             ),
             TextSpan(
               text: actionText,
-              // استخدمنا الـ authLink الجاهز اللي فيه الخط العريض والـ Underline
               style: AppTextStyles.authLink,
             ),
           ]),

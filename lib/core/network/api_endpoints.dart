@@ -34,4 +34,22 @@ class ApiEndpoints {
   static const String getAvatar = '/me/avatar';
   static const String deleteAvatar = '/me/avatar';
 
-}
+
+  // Roles
+  static const roles = "/api/Roles";
+
+  // Workspaces
+  static const workspaces = "/api/WorkSpaces";
+
+  static String workspaceById(int id) =>
+  "/api/WorkSpaces/$id";
+
+  static String members(int id) =>
+  "/api/WorkSpaces/$id/members";
+
+  static String addMember(int id) =>
+  "/api/WorkSpaces/$id/member";
+
+  static String updatePermissions(int id, String userId) =>
+  "/api/WorkSpaces/$id/members/$userId/permissions";
+  }

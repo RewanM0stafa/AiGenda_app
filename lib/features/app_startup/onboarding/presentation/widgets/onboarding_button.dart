@@ -1,5 +1,6 @@
-import 'package:ajenda_app/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_text_styles.dart';
 
 class OnboardingButton extends StatelessWidget {
   final String text;
@@ -13,25 +14,21 @@ class OnboardingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0),
-      child: SizedBox(
-        width: double.infinity,
-        height: 48,
-        child: ElevatedButton(
-          onPressed: onPressed,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
+    return SizedBox(
+      width: double.infinity, // خليناه ياخد العرض كامل
+      height: 56,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
           ),
-          child: Text(
-            text,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: AppColors.white,
-            ),
-          ),
+        ),
+        child: Text(
+          text,
+          style: AppTextStyles.buttonText, // استخدمنا الـ Button Style بتاعك
         ),
       ),
     );

@@ -1,6 +1,13 @@
 class AppStrings {
 
-
+// --- Onboarding ---
+  static const String obTitle1 = 'نظّم يومك بذكاء';
+  static const String obDesc1 = 'استخدم الذكاء الاصطناعي لترتيب مهامك وتقليل التشتت الرقمي.';
+  static const String obTitle2 = 'واجهة إنسانية';
+  static const String obDesc2 = 'تصميم يركز على هدوء عقلك وتسهيل الوصول لكل ما يهمك بسرعة.';
+  static const String obTitle3 = 'دعم كامل للغتك';
+  static const String obDesc3 = 'تجربة أصلية باللغة العربية مع دعم كامل للـ RTL من البداية.';
+  
   // Login
   static const String loginTitle = 'Welcome Back!';
   static const String loginSubtitle = 'welcome back, we missed you';
@@ -21,7 +28,10 @@ class AppStrings {
   static const String passwordHintLabel = r'💡 Must have: A-Z · a-z · 0-9 · special char (!@#$%)';
 
   //  Brand
+// --- Splash & App Info ---
   static const String appName = 'AIGENDA';
+  static const String taglineAr = 'نظّم عقلك، مش بس مهامك';
+  static const String taglineEn = 'Organize your mind, not just your tasks';
 
   //  Onboarding
   static const String skip       = 'Skip';

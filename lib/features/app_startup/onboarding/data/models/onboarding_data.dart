@@ -9,18 +9,18 @@ class OnboardingData{
   static List<OnboardingModel> get list => [
     OnboardingModel(
       image: AppAssets.onboarding1,
-      title: "",
-      description: "",//AppStrings.onboardingDesc1,
+      title: AppStrings.obTitle1,
+      description: AppStrings.obDesc1,
     ),
     OnboardingModel(
       image: AppAssets.onboarding2,
-      title: "",//AppStrings.onboardingTitle1,
-      description: "", //AppStrings.onboardingDesc2,
+      title:  AppStrings.obTitle2,
+      description: AppStrings.obDesc2,
     ),
     OnboardingModel(
       image: AppAssets.onboarding3,
-      title: "",//AppStrings.onboardingTitle1,
-      description: "", // AppStrings.onboardingDesc3,
+      title: AppStrings.obTitle3,
+      description: AppStrings.obDesc3,
     ),
   ];
 

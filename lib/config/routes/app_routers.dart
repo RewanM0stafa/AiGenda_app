@@ -13,6 +13,10 @@ import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
 import '../../features/profile/presentation/screens/change_password_screen.dart';
 import '../../features/profile/presentation/screens/edit_profile_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
+import '../../features/worksspace/logic/permission_cubit/permission_cubit.dart';
+import '../../features/worksspace/presentation/screens/member_screen.dart';
+import '../../features/worksspace/presentation/screens/permission_screen.dart';
+import '../../features/worksspace/presentation/screens/workspace_screen.dart';
 import '../dependency_injection.dart';
 import 'route_names.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,12 +26,10 @@ final GoRouter appRouter = GoRouter(
   routes: [
     GoRoute(
       path: RouteNames.splash,
-      name: 'splash',
       builder: (context, state) => const SplashScreen(),
     ),
     GoRoute(
       path: RouteNames.onboarding,
-      name: 'onboarding',
       builder: (context, state) => const OnboardingScreen(),
     ),
     // GoRoute(
@@ -40,7 +42,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: RouteNames.login,
       builder: (context, state) => BlocProvider(
-        create: (context) => getIt<AuthCubit>(), // حل مؤقت بس علشان أشوف ال ui
+        create: (context) => getIt<AuthCubit>(),
         child: LoginScreen(onSwitchToSignUp: () {    context.go(RouteNames.register);  },),
       ),
     ),
@@ -76,7 +78,7 @@ final GoRouter appRouter = GoRouter(
       path: RouteNames.checkEmail,
       builder: (context, state) => BlocProvider(
         create: (context) => getIt<AuthCubit>(),
-        child: const CheckEmailScreen(),
+        child:  CheckEmailScreen(),
       ),
     ),
 
@@ -94,7 +96,9 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: RouteNames.home,
       name: 'home',
-      builder: (context, state) => const HomeScreen(),
+     // builder: (context, state) => const HomeScreen(),
+      builder: (context, state) => const TemporarySelectionScreen(),
+
     ),
 
     //  Profile
@@ -121,6 +125,43 @@ final GoRouter appRouter = GoRouter(
         value: getIt<ProfileCubit>(),
         child: const ChangePasswordScreen(),
       ),
+    ),
+
+    //  Workspace route
+
+    GoRoute(
+      path: RouteNames.workspaces,
+      builder: (context, state) => const WorkspacesScreen(),
+    ),
+
+    // Member route
+    GoRoute(
+      path: RouteNames.members,
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+
+        return MembersScreen(
+          workspaceId: extra['workspaceId'],
+          workspaceName: extra['workspaceName'],
+        );
+      },
+    ),
+
+    // Permission route
+    GoRoute(
+      path: RouteNames.permissions,
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+
+        return BlocProvider(
+          create: (_) => getIt<PermissionsCubit>()
+            ..init(extra['permissions']),
+          child: PermissionsScreen(
+            workspaceId: extra['workspaceId'],
+            userId: extra['userId'],
+          ),
+        );
+      },
     ),
   ],
 );

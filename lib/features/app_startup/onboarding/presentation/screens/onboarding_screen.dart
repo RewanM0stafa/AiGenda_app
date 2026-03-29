@@ -1,11 +1,14 @@
-import 'package:ajenda_app/features/app_startup/onboarding/data/models/onboarding_data.dart';
+import 'package:ajenda_app/features/app_startup/onboarding/presentation/widgets/onboarding_slide.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../../core/constants/app_colors.dart';
+import '../../../../../core/constants/app_strings.dart';
+import '../../../../../core/constants/app_text_styles.dart';
 import '../../../../../config/routes/route_names.dart';
-import '../../../../../core/utils/navigation_helper.dart';
-import '../../data/models/onboarding_model.dart';
-import '../widgets/onboarding_button.dart';
 import '../widgets/onboarding_page_indicator.dart';
 import '../widgets/onboarding_page_view.dart';
+import '../widgets/onboarding_button.dart';
+import '../../data/models/onboarding_data.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -16,51 +19,59 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
-  late final List<OnboardingModel> onboardingData; // <= List
-  int currentIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    onboardingData = OnboardingData.list;
-  }
+  int _currentPage = 0;
+  final _pages = OnboardingData.list; // استخدمنا الداتا من الـ Model بتاعك
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () => context.go(RouteNames.login),
+                child: Text(AppStrings.skip, style: AppTextStyles.authLink),
+              ),
+            ),
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
-                onPageChanged: (index) => setState(() => currentIndex = index),
-                itemCount: onboardingData.length,
-                itemBuilder: (context, index) {
-                  return OnboardingPageView(dataModel: onboardingData[index]);
-                },
+                itemCount: _pages.length,
+                onPageChanged: (index) => setState(() => _currentPage = index),
+                itemBuilder: (context, index) =>
+                    OnboardingSlide(dataModel: _pages[index]),
               ),
             ),
-            OnboardingIndicator(
-              currentIndex: currentIndex,
-              length: onboardingData.length,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+              child: Column(
+                children: [
+                  OnboardingIndicator(
+                    currentIndex: _currentPage,
+                    length: _pages.length,
+                  ),
+                  const SizedBox(height: 32),
+                  OnboardingButton(
+                    text: _currentPage == _pages.length - 1
+                        ? AppStrings.getStarted
+                        : AppStrings.next,
+                    onPressed: () {
+                      if (_currentPage == _pages.length - 1) {
+                        context.go(RouteNames.login);
+                      } else {
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 500),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
-            OnboardingButton(
-              text: currentIndex == onboardingData.length - 1
-                  ? 'Get Started'
-                  : 'Next',
-              onPressed: () {
-                if (currentIndex < onboardingData.length - 1) {
-                  _pageController.nextPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeIn,
-                  );
-                } else {
-                  navigateTo(context, RouteNames.login);
-                }
-              },
-            ),
-            const SizedBox(height: 16),
           ],
         ),
       ),

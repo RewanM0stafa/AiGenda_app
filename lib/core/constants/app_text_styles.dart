@@ -1,55 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'app_colors.dart';
+import 'app_colors.dart'; // تأكد من مسار الملف عندك
 
 class AppTextStyles {
 
-  static TextStyle get headerTitle => GoogleFonts.poppins(
-    fontSize: 24,
-    fontWeight: FontWeight.bold,
-    color: Colors.black,
+  // ── Splash & Onboarding ──
+  static final TextStyle splashTitle = GoogleFonts.outfit(
+    fontSize: 46,
+    fontWeight: FontWeight.w800,
+    color: Colors.white, // أو AppColors.white لو متوفرة
+    letterSpacing: 7,
+    height: 1,
   );
-  static TextStyle authLink = GoogleFonts.poppins(
+
+  static final TextStyle taglineAr = GoogleFonts.cairo(
+    fontSize: 17,
+    fontWeight: FontWeight.w600,
+    color: AppColors.primary, // ربطناها بألوان التطبيق بتاعتك
+    height: 1.5,
+  );
+
+  static final TextStyle taglineEn = GoogleFonts.outfit(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textSecondary,
+    height: 1.5,
+  );
+
+  static final TextStyle buttonTextPrimary = GoogleFonts.cairo(
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    color: Colors.white,
+  );
+
+  // ── Auth & Links ──
+  static final TextStyle authLink = GoogleFonts.outfit(
     fontSize: 13,
     color: AppColors.primary,
     fontWeight: FontWeight.w600,
     decoration: TextDecoration.underline,
   );
 
-  static TextStyle authHint = GoogleFonts.poppins(
+  static final TextStyle hintStyle = GoogleFonts.outfit(
     fontSize: 13,
     color: AppColors.textSecondary,
   );
-
-  static TextStyle get hintStyle => GoogleFonts.poppins(
-    fontSize: 13,
-    color: AppColors.textSecondary,
-  );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   // ── Logo ──
   static final TextStyle logoText = GoogleFonts.outfit(
@@ -63,7 +58,7 @@ class AppTextStyles {
   static final TextStyle authTitle = GoogleFonts.outfit(
     fontSize: 32,
     fontWeight: FontWeight.w700,
-    color: AppColors.textDark,
+    color: AppColors.textDark, // تأكد إن اللون ده موجود في AppColors
     letterSpacing: 0.3,
     height: 1.2,
   );
@@ -78,7 +73,7 @@ class AppTextStyles {
   static final TextStyle authInstruction = GoogleFonts.outfit(
     fontSize: 13,
     fontWeight: FontWeight.w400,
-    color: AppColors.instructionPink,
+    color: AppColors.instructionPink, // تأكد إن اللون ده موجود في AppColors
     height: 1.5,
   );
 
@@ -92,7 +87,7 @@ class AppTextStyles {
   static final TextStyle fieldLabel = GoogleFonts.outfit(
     fontSize: 13,
     fontWeight: FontWeight.w500,
-    color: AppColors.textHint,
+    color: AppColors.textHint, // تأكد إن اللون ده موجود في AppColors
   );
 
   // ── Headlines ──
@@ -123,6 +118,12 @@ class AppTextStyles {
     height: 1.5,
   );
 
+  static final TextStyle bodyMedium = GoogleFonts.outfit( // ضفناها عشان كانت مستخدمة في زرار تسجيل الدخول في الـ Splash
+    fontSize: 13.5,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textSecondary,
+  );
+
   static final TextStyle bodySmall = GoogleFonts.outfit(
     fontSize: 13,
     fontWeight: FontWeight.w400,
@@ -134,7 +135,7 @@ class AppTextStyles {
   static final TextStyle buttonText = GoogleFonts.outfit(
     fontSize: 16,
     fontWeight: FontWeight.w600,
-    color: AppColors.white,
+    color: AppColors.white, // تأكد إن اللون ده موجود في AppColors
     letterSpacing: 0.3,
   );
 

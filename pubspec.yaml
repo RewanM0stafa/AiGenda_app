@@ -44,6 +44,7 @@ dependencies:
   app_links: ^6.4.1
   image_picker: ^1.2.1
   image_picker_windows: ^0.2.2 # ضيفي دي لو لسه الإيرور موجود بعد الرن
+  flutter_svg: ^2.2.4
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +71,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
    - assets/images/
+   - assets/images/onboarding/
+   - assets/images/svg_icons/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

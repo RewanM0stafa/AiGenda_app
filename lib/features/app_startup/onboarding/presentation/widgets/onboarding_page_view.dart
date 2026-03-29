@@ -14,7 +14,7 @@ class OnboardingPageView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-         // Expanded(child: Image.asset(dataModel.image, fit: BoxFit.contain)),
+          Expanded(child: Image.asset(dataModel.image, fit: BoxFit.contain)),
           const SizedBox(height: 24),
           Text(
             dataModel.title,

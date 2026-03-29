@@ -1,6 +1,6 @@
 class ApiKeys {
   // Response Keys
-  static const String id = "id";
+  static const String id = "id"; //  confirm change email send( id + newemail + code)
   static const String firstName = 'firstName';
   // auth files
   static const String lastName = 'lastName';
@@ -15,7 +15,7 @@ class ApiKeys {
   // Backward compatibility لو عندك ملفات قديمة بتستخدم lastName
 
   // Request Keys
-  static const String userId = "userId";
+  static const String userId = "userId"; //  confirm email send(userId + code)
   static const String code = "code";
 
   static const String password = 'password';
@@ -31,4 +31,21 @@ class ApiKeys {
   static const String dateOfBirth = "dateOfBirth";
 
   static const String avatarUrl = "avatarUrl";
-}
+
+  // workspace
+  //static const id = "id";
+  static const name = "name";
+  static const description = "description";
+  static const iconCode = "iconCode";
+  static const visibility = "visibility";
+  static const numberOfMembers = "numberofMembers";
+  static const numberOfTasks = "numberofTasks";
+  static const isOwnedByCurrentUser = "isOwnedByCurrentUser";
+
+  // member
+  static const fullName = "fullName";
+  static const isOwner = "isOwner";
+  static const joinedAt = "joinedAt";
+  static const permissions = "permissions";
+
+  }

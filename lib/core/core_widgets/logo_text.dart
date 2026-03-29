@@ -32,7 +32,7 @@ class LogoText extends StatelessWidget {
           fontSize: fontSize ?? 40,
           fontWeight: FontWeight.w800,
           letterSpacing: 4,
-          color: AppColors.white, // ShaderMask بيحل محله
+          color: AppColors.white,
         ),
       ),
     );

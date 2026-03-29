@@ -1,392 +1,94 @@
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
-import '../../../../core/core_widgets/gradient_button.dart';
+
+import '../../../../config/routes/route_names.dart';
+import '../../../../core/core_widgets/custom_back_button.dart';
 import '../../logic/auth_cubit/auth_cubit.dart';
 import '../../logic/auth_cubit/auth_state.dart';
-import '../../../../../../core/storage/secure_storage_service.dart';
-import '../../../../../../config/routes/route_names.dart';
+import '../widgets/auth_consumer.dart';
 import '../widgets/auth_helpers.dart';
+import '../widgets/labeled_auth_field.dart';
 import 'auth_widget.dart';
 
 class ConfirmEmailScreen extends StatefulWidget {
   final String? userId;
   final String? email;
-  final String? code; // من deep link
+  final String? code;
 
-  const ConfirmEmailScreen({
-    super.key,
-    this.userId,
-    this.email,
-    this.code,
-  });
+  const ConfirmEmailScreen({super.key, this.userId, this.email, this.code});
 
   @override
   State<ConfirmEmailScreen> createState() => _ConfirmEmailScreenState();
 }
 
-class _ConfirmEmailScreenState extends State<ConfirmEmailScreen>
-    with SingleTickerProviderStateMixin {
+class _ConfirmEmailScreenState extends State<ConfirmEmailScreen> {
   final _codeCtrl = TextEditingController();
-  bool _isResending = false;
-  bool _isSuccess = false;
-
-  late AnimationController _shakeCtrl;
-  late Animation<double> _shakeAnim;
-
-  @override
-  void initState() {
-    super.initState();
-    _shakeCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 500));
-    _shakeAnim = Tween<double>(begin: 0, end: 1)
-        .animate(CurvedAnimation(parent: _shakeCtrl, curve: Curves.elasticIn));
-
-    // لو جاي من Deep Link → ابعت تلقائياً
-    if (widget.userId != null &&
-        widget.userId!.isNotEmpty &&
-        widget.code != null &&
-        widget.code!.isNotEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.read<AuthCubit>().confirmEmail(widget.userId!, widget.code!);
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _codeCtrl.dispose();
-    _shakeCtrl.dispose();
-    super.dispose();
-  }
-
-  Future<void> _handleConfirm() async {
-    final code = _codeCtrl.text.trim();
-    if (code.isEmpty) {
-      showAuthError(context, 'Please enter the verification code.');
-      _shakeCtrl.forward(from: 0);
-      return;
-    }
-
-    // جيب userId من storage لو مش موجود في widget
-    String userId = widget.userId ?? '';
-    if (userId.isEmpty) {
-      userId = await SecureStorageService().getUserId() ?? '';
-    }
-
-    if (userId.isEmpty) {
-      showAuthError(context, 'Session expired. Please register again.');
-      return;
-    }
-
-    if (mounted) {
-      context.read<AuthCubit>().confirmEmail(userId, code);
-    }
-  }
-
-  Future<void> _handleResend() async {
-    final email = widget.email ?? '';
-    if (email.isEmpty) return;
-
-    setState(() => _isResending = true);
-    await context.read<AuthCubit>().resendConfirmEmail(email);
-    if (mounted) setState(() => _isResending = false);
-  }
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final email = widget.email ?? 'your email';
+    final authCubit = context.watch<AuthCubit>();
+    final isLoading = authCubit.state is ConfirmEmailLoading;
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F3FF),
-      body: BlocConsumer<AuthCubit, AuthState>(
-        listener: (context, state) {
-          if (state is ConfirmEmailSuccess) {
-            setState(() => _isSuccess = true);
-            Future.delayed(const Duration(seconds: 3), () {
-              if (mounted) context.go(RouteNames.login);
-            });
-          }
-          if (state is ConfirmEmailFailure) {
-            showAuthError(context, state.message);
-            _shakeCtrl.forward(from: 0);
-          }
-          if (state is ResendEmailSuccess) {
-            showSuccessMessage(context, 'Code resent! Check your email.');
-          }
-          if (state is ResendEmailFailure) {
-            showAuthError(context, 'Failed to resend. Try again.');
-          }
-        },
-        builder: (context, state) {
-          final isLoading = state is ConfirmEmailLoading;
-
-          return SafeArea(
-            child: _isSuccess
-                ? _buildSuccess()
-                : SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
-                  horizontal: 28, vertical: 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // ── Back ──
-                  GestureDetector(
-                    onTap: () => context.go(RouteNames.login),
-                    child: backButton(),
-                  ),
-                  const SizedBox(height: 40),
-
-                  // ── Icon ──
-                  Center(
-                    child: Container(
-                      width: 90,
-                      height: 90,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color(0xFF8B6FD4),
-                            Color(0xFF5B3A9E)
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF6C3FC8)
-                                .withOpacity(0.35),
-                            blurRadius: 24,
-                            offset: const Offset(0, 8),
-                          )
-                        ],
-                      ),
-                      child: const Icon(Icons.mark_email_read_rounded,
-                          color: Colors.white, size: 42),
-                    ),
-                  ),
-                  const SizedBox(height: 28),
-
-                  Center(
-                    child: Text('Check Your Email!',
-                        style: GoogleFonts.poppins(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w700,
-                            color: const Color(0xFF1E0F5C))),
-                  ),
-                  const SizedBox(height: 8),
-                  Center(
-                    child: Text('We sent a verification code to',
-                        style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            color: const Color(0xFF8A84A3))),
-                  ),
-                  const SizedBox(height: 4),
-                  Center(
-                    child: Text(email,
-                        style: GoogleFonts.poppins(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF7C5CBF))),
-                  ),
-                  const SizedBox(height: 40),
-
-                  // ── Code Field ──
-                  Text('Verification Code',
-                      style: GoogleFonts.poppins(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          color: const Color(0xFF8A84A3))),
-                  const SizedBox(height: 8),
-
-                  AnimatedBuilder(
-                    animation: _shakeAnim,
-                    builder: (_, child) => Transform.translate(
-                      offset: Offset(
-                          _shakeAnim.value > 0
-                              ? 8 *
-                              (1 - _shakeAnim.value) *
-                              ((_shakeAnim.value * 10).toInt() %
-                                  2 ==
-                                  0
-                                  ? 1
-                                  : -1)
-                              : 0,
-                          0),
-                      child: child,
-                    ),
-                    child: TextField(
-                      controller: _codeCtrl,
-                      keyboardType: TextInputType.text,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: const Color(0xFF1E0F5C),
-                        letterSpacing: 1.5,
-                      ),
-                      decoration: InputDecoration(
-                        hintText: 'Enter your verification code',
-                        hintStyle: GoogleFonts.poppins(
-                            fontSize: 13,
-                            color: const Color(0xFFBBB8CC),
-                            letterSpacing: 0),
-                        filled: true,
-                        fillColor: Colors.white,
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 16),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14),
-                            borderSide: BorderSide.none),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(
-                              color: Color(0xFFE8E4F5), width: 1.5),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(
-                              color: Color(0xFF7C5CBF), width: 2),
-                        ),
-                      ),
-                      onSubmitted: (_) => _handleConfirm(),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-
-                  Text(
-                    '💡 Copy the code from your email and paste it here',
-                    style: GoogleFonts.poppins(
-                        fontSize: 11,
-                        color: const Color(0xFF8A84A3)),
-                  ),
-                  const SizedBox(height: 32),
-
-                  // ── Confirm Button ──
-                  GradientButton(
-                    label: 'Confirm Email',
-                    isLoading: isLoading,
-                    onTap: _handleConfirm,
-                  ),
-                  const SizedBox(height: 24),
-
-                  // ── Resend ──
-                  Center(
-                    child: _isResending
-                        ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              Color(0xFF7C5CBF)),
-                        ))
-                        : GestureDetector(
-                      onTap: _handleResend,
-                      child: RichText(
-                        text: TextSpan(children: [
-                          TextSpan(
-                            text: "Didn't receive it?  ",
-                            style: GoogleFonts.poppins(
-                                fontSize: 13,
-                                color: const Color(0xFF8A84A3)),
-                          ),
-                          TextSpan(
-                            text: 'Resend',
-                            style: GoogleFonts.poppins(
-                              fontSize: 13,
-                              color: const Color(0xFF7C5CBF),
-                              fontWeight: FontWeight.w600,
-                              decoration: TextDecoration.underline,
-                              decorationColor:
-                              const Color(0xFF7C5CBF),
-                            ),
-                          ),
-                        ]),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  Center(
-                    child: TextButton(
-                      onPressed: () => context.go(RouteNames.login),
-                      child: Text('Back to Sign In',
-                          style: GoogleFonts.poppins(
-                              fontSize: 13,
-                              color: const Color(0xFF8A84A3),
-                              fontWeight: FontWeight.w500)),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildSuccess() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
+    return AuthConsumer(
+      title: 'Verify Your Email',
+      subtitle: 'We sent a code to ${widget.email ?? "your email"}',
+      isLoadingCondition: (state) => state is ConfirmEmailLoading,
+      listener: _handleStateChanges,
+      child: Form(
+        key: _formKey,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                color: const Color(0xFFE8FFF0),
-                shape: BoxShape.circle,
-                border: Border.all(
-                    color: const Color(0xFF4CAF50), width: 2.5),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFF4CAF50).withOpacity(0.2),
-                    blurRadius: 24,
-                    offset: const Offset(0, 8),
-                  )
-                ],
-              ),
-              child: const Icon(Icons.check_rounded,
-                  color: Color(0xFF4CAF50), size: 52),
+
+            LabeledAuthField(
+              label: 'Verification Code',
+              hint: '',
+              controller: _codeCtrl,
+              enabled: !isLoading,
+              keyboardType: TextInputType.number,
+              validator: (v) => v!.isEmpty ? 'Required' : null, prefixIcon:Icons.lock_open_rounded ,
             ),
-            const SizedBox(height: 28),
-            Text('Email Confirmed 🎉',
-                style: GoogleFonts.poppins(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: const Color(0xFF1E0F5C))),
-            const SizedBox(height: 10),
-            Text(
-              'Your email has been verified successfully.\nYou can now sign in with your account.',
-              textAlign: TextAlign.center,
-              style: GoogleFonts.poppins(
-                  fontSize: 13,
-                  color: const Color(0xFF8A84A3),
-                  height: 1.7),
+            const SizedBox(height: 24),
+            AuthGradientButton(
+              label: 'Confirm',
+              isLoading: isLoading,
+              onTap: () => _onConfirmPressed(context),
             ),
-            const SizedBox(height: 32),
-            const CircularProgressIndicator(
-              valueColor:
-              AlwaysStoppedAnimation<Color>(Color(0xFF7C5CBF)),
-              strokeWidth: 2.5,
-            ),
-            const SizedBox(height: 16),
-            Text('Taking you to Sign In...',
-                style: GoogleFonts.poppins(
-                    fontSize: 12, color: const Color(0xFF8A84A3))),
+            const SizedBox(height: 20),
+            _buildResendButton(context, isLoading),
           ],
         ),
       ),
     );
   }
-}
 
+  void _handleStateChanges(BuildContext context, AuthState state) {
+    if (state is ConfirmEmailSuccess) {
+      showSuccessMessage(context, 'Email Verified! Redirecting...');
+      Future.delayed(const Duration(seconds: 2), () => context.go(RouteNames.login));
+    }
+    if (state is ResendEmailSuccess) {
+      showSuccessMessage(context, 'Check your inbox for a new code.');
+    }
+  }
+
+  void _onConfirmPressed(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      context.read<AuthCubit>().confirmEmail(widget.userId ?? '', _codeCtrl.text.trim());
+    }
+  }
+
+  Widget _buildResendButton(BuildContext context, bool isLoading) {
+    return Center(
+      child: TextButton(
+        onPressed: isLoading ? null : () => context.read<AuthCubit>().resendConfirmEmail(widget.email??''),
+        child: const Text("Didn't get a code? Resend"),
+      ),
+    );
+  }
+}
 
 
 

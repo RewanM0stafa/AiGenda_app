@@ -26,41 +26,52 @@ class AuthRepositoryImpl implements AuthRepository {
     required this.apiService,
     required this.storage,
   });
-
-  // ── Error Handler ──
   String _handleError(dynamic error) {
     if (error is DioException) {
-      final data = error.response?.data;
+      // 1. لو السيرفر رد فعلاً (حتى لو الرد فيه خطأ)
+      if (error.response != null) {
+        final data = error.response?.data;
 
-      if (data is Map<String, dynamic>) {
-        final problemDetails = data['problemDetails'];
+        if (data is Map<String, dynamic>) {
+          final problemDetails = data['problemDetails'];
 
-        if (problemDetails is Map<String, dynamic>) {
-          final errors = problemDetails['error'];
+          // أ. معالجة الـ problemDetails (النمط اللي إنتِ متبعاه)
+          if (problemDetails is Map<String, dynamic>) {
+            final errors = problemDetails['error'];
 
-          if (errors is List && errors.length >= 2) {
-            return errors[1].toString();
+            if (errors is List && errors.isNotEmpty) {
+              // تعديل ذكي: لو فيه خطأ واحد هاته، لو أكتر هات التاني (حسب نظام الباك عندك)
+              return errors.length >= 2 ? errors[1].toString() : errors[0].toString();
+            }
+            return problemDetails['title'] ?? 'Server error occurred';
           }
 
-          return problemDetails['title'] ?? 'Something went wrong';
+          // ب. لو الباك-إند باعت رسالة مباشرة (زي message أو error)
+          return data['message']?.toString() ?? data['error']?.toString() ?? 'Something went wrong';
         }
 
-        if (data['message'] != null) {
-          return data['message'].toString();
-        }
+        // ج. لو مفيش Body أصلاً بس فيه Status Code (زي 500 أو 404)
+        if (error.response?.statusCode == 500) return 'Internal Server Error (500)';
+        if (error.response?.statusCode == 404) return 'Service not found (404)';
       }
 
+      // 2. أخطاء الـ Timeout (الشبكة بطيئة)
       if (error.type == DioExceptionType.connectionTimeout ||
           error.type == DioExceptionType.receiveTimeout) {
-        return 'Connection timeout. Check your internet.';
+        return 'Connection timeout. Please check your internet.';
       }
 
-      return 'Connection error. Check your internet.';
+      // 3. لو مفيش إنترنت خالص (No Internet Connection)
+      if (error.type == DioExceptionType.connectionError) {
+        return 'No internet connection. Please connect and try again.';
+      }
+
+      return 'Network error: ${error.type.name}';
     }
 
-    return 'Something went wrong. Please try again.';
+    // 4. لو حصل Bug في الكود نفسه (Null pointer مثلاً)
+    return 'Unexpected error. Please try again.';
   }
-
   // ── Login ──
   @override
   Future<Either<String, LoginResponse>> login(LoginRequest request) async {
@@ -107,6 +118,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   // ── Register ──
+// ── Register (النسخة المصححة) ──
   @override
   Future<Either<String, void>> register(RegisterRequest request) async {
     try {
@@ -115,17 +127,30 @@ class AuthRepositoryImpl implements AuthRepository {
         data: request.toJson(),
       );
 
-      /// لو الباك بيرجع userId
+      // 1. ✅ صمام الأمان: لو السيرفر رجع 200 بس جواه problemDetails (خطأ)
+      if (response is Map<String, dynamic> && response['problemDetails'] != null) {
+        return Left(_handleError(DioException(
+          requestOptions: RequestOptions(),
+          response: Response(
+            requestOptions: RequestOptions(),
+            data: response,
+          ),
+        )));
+      }
+
+      // 2. لو الباك بيرجع userId نحفظه
       if (response != null && response is Map<String, dynamic>) {
         if (response['id'] != null) {
           await storage.saveUserId(response['id'].toString());
         }
       }
 
+      // 3. حفظ الإيميل لاستخدامه في الـ Resend
       await storage.saveEmail(request.email);
 
-      return const Right(null);
+      return const Right(null); // النجاح الحقيقي
     } catch (e) {
+      // 4. لو الـ Dio رمى إيرور (مثل 400 Bad Request)
       return Left(_handleError(e));
     }
   }

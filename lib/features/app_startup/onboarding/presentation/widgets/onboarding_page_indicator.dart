@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../../core/constants/app_colors.dart';
 
 class OnboardingIndicator extends StatelessWidget {
   final int currentIndex;
@@ -16,15 +17,15 @@ class OnboardingIndicator extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
         length,
-            (index) => AnimatedContainer(
+        (index) => AnimatedContainer(
           duration: const Duration(milliseconds: 250),
           margin: const EdgeInsets.symmetric(horizontal: 4.0),
           height: 8,
           width: currentIndex == index ? 24 : 8,
           decoration: BoxDecoration(
             color: currentIndex == index
-                ? Theme.of(context).colorScheme.primary
-                : Colors.grey.shade400,
+                ? AppColors.primary
+                : AppColors.textHint, // ألوان موحدة من ملفك
             borderRadius: BorderRadius.circular(4),
           ),
         ),

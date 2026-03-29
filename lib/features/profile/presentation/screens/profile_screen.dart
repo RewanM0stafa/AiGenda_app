@@ -71,6 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
+                  GestureDetector(onTap: () => context.pop(), child: backBtn()),
                   _buildTopBar(context),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
