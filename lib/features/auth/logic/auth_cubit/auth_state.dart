@@ -143,8 +143,10 @@ class LoginFailure extends AuthState {
 class RegisterLoading extends AuthState {}
 
 class RegisterSuccess extends AuthState {
-  final String email; // بنبعته للـ ConfirmEmailScreen
-  RegisterSuccess(this.email);
+  final String email;
+  final String userId;
+
+  RegisterSuccess({required this.email, required this.userId});
 }
 
 class RegisterFailure extends AuthState {

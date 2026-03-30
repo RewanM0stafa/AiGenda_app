@@ -11,13 +11,29 @@ import '../widgets/auth_consumer.dart';
 import '../widgets/auth_helpers.dart';
 import '../widgets/labeled_auth_field.dart';
 import 'auth_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+
+import '../../../../config/routes/route_names.dart';
+import '../../../../core/core_widgets/custom_back_button.dart';
+import '../../../../core/storage/secure_storage_service.dart';
+import '../../logic/auth_cubit/auth_cubit.dart';
+import '../../logic/auth_cubit/auth_state.dart';
+import '../widgets/auth_consumer.dart';
+import '../widgets/auth_helpers.dart';
+import '../widgets/labeled_auth_field.dart';
+import 'auth_widget.dart';
 
 class ConfirmEmailScreen extends StatefulWidget {
   final String? userId;
   final String? email;
-  final String? code;
 
-  const ConfirmEmailScreen({super.key, this.userId, this.email, this.code});
+  const ConfirmEmailScreen({
+    super.key,
+    this.userId,
+    this.email,
+  });
 
   @override
   State<ConfirmEmailScreen> createState() => _ConfirmEmailScreenState();
@@ -27,6 +43,29 @@ class _ConfirmEmailScreenState extends State<ConfirmEmailScreen> {
   final _codeCtrl = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  String? _userId;
+  String? _email;
+
+  @override
+  void initState() {
+    super.initState();
+    _initData();
+  }
+
+  /// 🔹 تحميل البيانات (navigation + fallback storage)
+  Future<void> _initData() async {
+    final cubit = context.read<AuthCubit>();
+    final storage = cubit.storage;
+
+    final savedUserId = await storage.getUserId();
+    final savedEmail = await storage.getEmail();
+
+    setState(() {
+      _userId = widget.userId ?? savedUserId;
+      _email = widget.email ?? savedEmail;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final authCubit = context.watch<AuthCubit>();
@@ -34,29 +73,35 @@ class _ConfirmEmailScreenState extends State<ConfirmEmailScreen> {
 
     return AuthConsumer(
       title: 'Verify Your Email',
-      subtitle: 'We sent a code to ${widget.email ?? "your email"}',
+      subtitle: 'We sent a code to ${_email ?? "your email"}',
       isLoadingCondition: (state) => state is ConfirmEmailLoading,
       listener: _handleStateChanges,
       child: Form(
         key: _formKey,
         child: Column(
           children: [
-
             LabeledAuthField(
               label: 'Verification Code',
               hint: '',
               controller: _codeCtrl,
               enabled: !isLoading,
               keyboardType: TextInputType.number,
-              validator: (v) => v!.isEmpty ? 'Required' : null, prefixIcon:Icons.lock_open_rounded ,
+              validator: (v) =>
+              v == null || v.isEmpty ? 'Required' : null,
+              prefixIcon: Icons.lock_open_rounded,
             ),
             const SizedBox(height: 24),
+
+            /// 🔹 Confirm Button
             AuthGradientButton(
               label: 'Confirm',
               isLoading: isLoading,
               onTap: () => _onConfirmPressed(context),
             ),
+
             const SizedBox(height: 20),
+
+            /// 🔹 Resend Button
             _buildResendButton(context, isLoading),
           ],
         ),
@@ -64,33 +109,67 @@ class _ConfirmEmailScreenState extends State<ConfirmEmailScreen> {
     );
   }
 
+  /// 🔹 Handle states
   void _handleStateChanges(BuildContext context, AuthState state) {
     if (state is ConfirmEmailSuccess) {
       showSuccessMessage(context, 'Email Verified! Redirecting...');
-      Future.delayed(const Duration(seconds: 2), () => context.go(RouteNames.login));
+      Future.delayed(
+        const Duration(seconds: 2),
+            () => context.go(RouteNames.login),
+      );
     }
+
+    if (state is ConfirmEmailFailure) {
+      showAuthError(context, state.message);
+    }
+
     if (state is ResendEmailSuccess) {
       showSuccessMessage(context, 'Check your inbox for a new code.');
     }
-  }
 
-  void _onConfirmPressed(BuildContext context) {
-    if (_formKey.currentState!.validate()) {
-      context.read<AuthCubit>().confirmEmail(widget.userId ?? '', _codeCtrl.text.trim());
+    if (state is ResendEmailFailure) {
+      showAuthError(context, state.message);
     }
   }
 
+  /// 🔹 Confirm Action
+// داخل _onConfirmPressed
+  void _onConfirmPressed(BuildContext context) {
+    if (_formKey.currentState!.validate()) {
+      // بنادي على الـ Cubit وببعت الـ _userId (سواء جه من الـ constructor أو الـ storage)
+      context.read<AuthCubit>().confirmEmail(
+        userId: _userId, // حتى لو null الكوبيت هيتصرف ويجيبه من الاستورج
+        code: _codeCtrl.text.trim(),
+      );
+    }
+  }
+  /// 🔹 Resend Button
   Widget _buildResendButton(BuildContext context, bool isLoading) {
     return Center(
       child: TextButton(
-        onPressed: isLoading ? null : () => context.read<AuthCubit>().resendConfirmEmail(widget.email??''),
+        onPressed: isLoading
+            ? null
+            : () {
+          if (_email == null || _email!.isEmpty) {
+            showAuthError(context, 'Missing email');
+            return;
+          }
+
+          context
+              .read<AuthCubit>()
+              .resendConfirmEmail(_email!);
+        },
         child: const Text("Didn't get a code? Resend"),
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _codeCtrl.dispose();
+    super.dispose();
+  }
 }
-
-
 
 
 /*

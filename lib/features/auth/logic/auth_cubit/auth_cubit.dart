@@ -266,18 +266,32 @@ class AuthCubit extends Cubit<AuthState> {
 
     final result = await repo.register(request);
 
-    result.fold(
-          (err) => emit(RegisterFailure(err)),
-          (_) => emit(RegisterSuccess(request.email)),
+    // بنستخدم fold عشان نتعامل مع الـ Either
+    await result.fold(
+          (err) async => emit(RegisterFailure(err)),
+          (_) async {
+        // نسرق الـ ID من الاستورج اللي الـ Repo لسه مسيفه حالا
+        final savedId = await storage.getUserId() ?? '';
+        emit(RegisterSuccess(email: request.email, userId: savedId));
+      },
     );
   }
 
   // ─────────── CONFIRM EMAIL ───────────
-  Future<void> confirmEmail(String userId, String code) async {
+  // داخل كلاس AuthCubit
+  Future<void> confirmEmail({String? userId, required String code}) async {
     emit(ConfirmEmailLoading());
 
+    // صمام أمان: لو الـ ID مش جاي من الـ UI، هاته من الاستورج
+    final finalUserId = userId ?? await storage.getUserId();
+
+    if (finalUserId == null || finalUserId.isEmpty) {
+      emit(ConfirmEmailFailure("Session expired. Please register again."));
+      return;
+    }
+
     final result = await repo.confirmEmail(
-      ConfirmEmailRequest(userId: userId, code: code),
+      ConfirmEmailRequest(userId: finalUserId, code: code),
     );
 
     result.fold(

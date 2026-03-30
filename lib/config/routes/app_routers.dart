@@ -1,3 +1,4 @@
+import 'package:ajenda_app/core/network/api_keys.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/app_startup/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/app_startup/splash/presentation/screens/splash_screen.dart';
@@ -7,7 +8,6 @@ import '../../features/auth/presentation/screens/confirm_email_screen.dart';
 import '../../features/auth/presentation/screens/enter_code_screen.dart';
 import '../../features/auth/presentation/screens/login_screen.dart';
 import '../../features/auth/presentation/screens/register_screen.dart';
-import '../../features/auth/presentation/screens/welcome_screen.dart';
 import '../../features/home/presentation/screens/home_screen.dart';
 import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
 import '../../features/profile/presentation/screens/change_password_screen.dart';
@@ -58,21 +58,20 @@ final GoRouter appRouter = GoRouter(
 
 
 
-    //  Confirm Email
     GoRoute(
       path: RouteNames.confirmEmail,
       builder: (context, state) {
-        final extra = state.extra as Map<String, String>?;
+        final extra = state.extra as Map<String, dynamic>?;
+
         return BlocProvider(
           create: (context) => getIt<AuthCubit>(),
           child: ConfirmEmailScreen(
-            userId: extra?['userId'],
-            code: extra?['code'],
+            userId: extra?[ApiKeys.userId],
+            email: extra?[ApiKeys.email],
           ),
         );
       },
     ),
-
     //  Check Email
     GoRoute(
       path: RouteNames.checkEmail,
@@ -165,28 +164,3 @@ final GoRouter appRouter = GoRouter(
     ),
   ],
 );
-/*
-GoRoute(
-  path: RouteNames.profile,
-  builder: (context, state) => BlocProvider.value(
-    value: getIt<ProfileCubit>()..load(),
-    child: const ProfileScreen(),
-  ),
-),
-
-GoRoute(
-  path: RouteNames.editProfile,
-  builder: (context, state) => BlocProvider.value(
-    value: getIt<ProfileCubit>(),
-    child: const EditProfileScreen(),
-  ),
-),
-
-GoRoute(
-  path: RouteNames.changePassword,
-  builder: (context, state) => BlocProvider.value(
-    value: getIt<ProfileCubit>(),
-    child: const ChangePasswordScreen(),
-  ),
-),
- */

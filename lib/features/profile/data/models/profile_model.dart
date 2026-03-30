@@ -27,7 +27,6 @@ class ProfileModel {
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
     String? avatarPath = json[ApiKeys.avatarUrl] ?? json['avatar'];
 
-    // ✅ معالجة الرابط: لو موجود ومش بيبدأ بـ http، ندمجه مع الـ baseUrl
     if (avatarPath != null && !avatarPath.startsWith('http')) {
       avatarPath = '${ApiEndpoints.baseUrl}$avatarPath';
     }

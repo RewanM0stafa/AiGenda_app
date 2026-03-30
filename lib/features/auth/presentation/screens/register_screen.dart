@@ -54,9 +54,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is RegisterSuccess) {
-          context.push(
+          context.go(
             RouteNames.confirmEmail,
-            extra: {'email': state.email, 'userId': ''},
+            extra: {'email': state.email, 'userId': state.userId},
           );
         }
         if (state is RegisterFailure) showAuthError(context, state.message);

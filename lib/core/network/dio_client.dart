@@ -27,7 +27,6 @@ class DioClient {
     };
 
     // 4. المفتشين (Interceptors)
-    // ده هيطبعلي كل حاجة بتحصل في الـ Console عشان أشوف الـ API رايح فين وجاي منين
     dio.interceptors.addAll([
       AuthInterceptor(dio),
       LogInterceptor(

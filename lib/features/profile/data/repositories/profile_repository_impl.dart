@@ -90,7 +90,6 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<Either<String, String>> uploadAvatar(String filePath) async {
     try {
-      // استخدمنا 'File' بـ F كبيرة بناءً على الـ Swagger
       final formData = FormData.fromMap({
         'File': await MultipartFile.fromFile(filePath),
       });
@@ -98,11 +97,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
       final response = await apiService.post(ApiEndpoints.uploadAvatar, data: formData);
 
       if (response is Map<String, dynamic>) {
-        // بنستخدم الـ Key اللي شفناه في الـ Log وهو 'avatarUrl'
         final relativePath = response['avatarUrl'] ?? '';
 
         if (relativePath.isNotEmpty) {
-          // بنركب الـ BaseUrl مع المسار اللي راجع من السيرفر
           final fullUrl = "${ApiEndpoints.baseUrl}$relativePath";
           return Right(fullUrl);
         }
@@ -124,145 +121,3 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 }
 
-
-
-/*
-class ProfileRepositoryImpl implements ProfileRepository {
-  final ApiService apiService;
-
-  ProfileRepositoryImpl({required this.apiService});
-
-  @override
-  Future<Either<String, ProfileModel>> getProfile() async {
-    try {
-      final res = await apiService.get(ApiEndpoints.me);
-
-      if (res is Map<String, dynamic> && res['problemDetails'] != null) {
-        return Left(res['problemDetails']['title'] ?? 'Error');
-      }
-
-      if (res is! Map<String, dynamic>) {
-        return const Left('Invalid response');
-      }
-
-      return Right(ProfileModel.fromJson(res));
-    } catch (e) {
-      return Left(_handleError(e));
-    }
-  }
-
-  @override
-  Future<Either<String, ProfileModel>> updateProfile(
-      UpdateProfileRequest request) async {
-    try {
-      final res = await apiService.put(
-        ApiEndpoints.me,
-        data: request.toJson(),
-      );
-
-      if (res is! Map<String, dynamic>) {
-        return const Left('Invalid response');
-      }
-
-      return Right(ProfileModel.fromJson(res));
-    } catch (e) {
-      return Left(_handleError(e));
-    }
-  }
-
-  @override
-  Future<Either<String, void>> changePassword(
-      ChangePasswordRequest request) async {
-    try {
-      await apiService.put(
-        ApiEndpoints.changePassword,
-        data: request.toJson(),
-      );
-      return const Right(null);
-    } catch (e) {
-      return Left(_handleError(e));
-    }
-  }
-
-  @override
-  Future<Either<String, void>> changeEmail(
-      ChangeEmailRequest request) async {
-    try {
-      await apiService.post(
-        ApiEndpoints.changeEmail,
-        data: request.toJson(),
-      );
-      return const Right(null);
-    } catch (e) {
-      return Left(_handleError(e));
-    }
-  }
-
-  @override
-  Future<Either<String, void>> confirmChangeEmail(
-      ConfirmChangeEmailRequest request) async {
-    try {
-      await apiService.put(
-        ApiEndpoints.confirmChangeEmail,
-        data: request.toJson(),
-      );
-      return const Right(null);
-    } catch (e) {
-      return Left(_handleError(e));
-    }
-  }
-
-  @override
-  Future<Either<String, String>> uploadAvatar(String path) async {
-    try {
-      final formData = FormData.fromMap({
-        'file': await MultipartFile.fromFile(path),
-      });
-
-      final res = await apiService.post(
-        ApiEndpoints.uploadAvatar,
-        data: formData,
-      );
-
-      return Right(res.toString());
-    } catch (e) {
-      return Left(_handleError(e));
-    }
-  }
-
-  Future<Either<String, String>> getAvatar() async {
-    try {
-      final res = await apiService.get(ApiEndpoints.getAvatar);
-      return Right(res.toString());
-    } catch (e) {
-      return Left(_handleError(e));
-    }
-  }
-
-  @override
-  Future<Either<String, void>> deleteAvatar() async {
-    try {
-      await apiService.delete(ApiEndpoints.deleteAvatar);
-      return const Right(null);
-    } catch (e) {
-      return Left(_handleError(e));
-    }
-  }
-
-  String _handleError(dynamic error) {
-    if (error is DioException) {
-      final data = error.response?.data;
-
-      if (data is Map<String, dynamic>) {
-        return data['message']?.toString() ??
-            error.message ??
-            'Error';
-      }
-
-      return error.message ?? 'Error';
-    }
-
-    return 'Something went wrong';
-  }
-}
-*/
