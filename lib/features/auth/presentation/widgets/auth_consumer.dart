@@ -33,6 +33,10 @@ class AuthConsumer extends StatelessWidget {
         if (state is RegisterFailure) errorMessage = state.message;
         if (state is ConfirmEmailFailure) errorMessage = state.message;
 
+        if (state is ForgetPasswordFailure) errorMessage = state.message;
+        if (state is ResetPasswordFailure) errorMessage = state.message;
+        if (state is ResendEmailFailure) errorMessage = state.message;
+
         return AuthScaffold(
           headerTitle: title,
           headerSubtitle: subtitle,

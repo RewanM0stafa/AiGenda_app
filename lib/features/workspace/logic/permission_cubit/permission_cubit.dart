@@ -1,4 +1,4 @@
-import 'package:ajenda_app/features/worksspace/logic/permission_cubit/permission_state.dart';
+import 'package:ajenda_app/features/workspace/logic/permission_cubit/permission_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/constants/app_permissions.dart';
 import '../../../roles/models/workspce_role.dart';

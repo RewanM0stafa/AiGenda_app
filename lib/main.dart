@@ -8,7 +8,7 @@ void main() async{
   WidgetsFlutterBinding.ensureInitialized();
 
   // بننادي على الدالة اللي عملناها في ملف الـ DI
-  setupDependencyInjection();
+  await setupDependencyInjection();
   runApp(const MyApp());
 }
 

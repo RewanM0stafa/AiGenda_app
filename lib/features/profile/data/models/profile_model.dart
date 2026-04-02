@@ -1,6 +1,8 @@
 import 'package:ajenda_app/core/network/api_keys.dart';
-
 import '../../../../core/network/api_endpoints.dart';
+
+// sentinel داخلي — مش const عشان identical() يشتغل صح
+final _absent = Object();
 
 class ProfileModel {
   final String id;
@@ -21,14 +23,15 @@ class ProfileModel {
     this.profileImage,
   });
 
-  String get fullName => '$firstName $secondName';
+  String get fullName => '$firstName $secondName'.trim();
   String get displayName => '@$firstName$secondName';
 
   factory ProfileModel.fromJson(Map<String, dynamic> json) {
     String? avatarPath = json[ApiKeys.avatarUrl] ?? json['avatar'];
 
-    // ✅ معالجة الرابط: لو موجود ومش بيبدأ بـ http، ندمجه مع الـ baseUrl
-    if (avatarPath != null && !avatarPath.startsWith('http')) {
+    if (avatarPath != null &&
+        avatarPath.isNotEmpty && 
+        !avatarPath.startsWith('http')) {
       avatarPath = '${ApiEndpoints.baseUrl}$avatarPath';
     }
 
@@ -42,22 +45,27 @@ class ProfileModel {
       profileImage: avatarPath,
     );
   }
-  Map<String, dynamic> toJson() => {
-    ApiKeys.id: id,
-    ApiKeys.firstName: firstName,
-    ApiKeys.secondName: secondName,
-    ApiKeys.email: email,
-    if (jobTitle != null) ApiKeys.jobTitle: jobTitle,
-    if (dateOfBirth != null) ApiKeys.dateOfBirth: dateOfBirth,
-    if (profileImage != null) ApiKeys.avatarUrl: profileImage,
-  };
 
+  Map<String, dynamic> toJson() => {
+        ApiKeys.id: id,
+        ApiKeys.firstName: firstName,
+        ApiKeys.secondName: secondName,
+        ApiKeys.email: email,
+        if (jobTitle != null) ApiKeys.jobTitle: jobTitle,
+        if (dateOfBirth != null) ApiKeys.dateOfBirth: dateOfBirth,
+        if (profileImage != null) ApiKeys.avatarUrl: profileImage,
+      };
+
+  // profileImage بياخد Object? عشان نقدر نبعت _absent كـ sentinel
+  // لو مبعتيش قيمة → يفضل القديم
+  // لو بعتِ null → يحذف الصورة فعلاً
+  // لو بعتِ string → يحدّث الصورة
   ProfileModel copyWith({
     String? firstName,
     String? secondName,
     String? jobTitle,
     String? dateOfBirth,
-    String? profileImage,
+    Object? profileImage = const _Absent(),
   }) =>
       ProfileModel(
         id: id,
@@ -66,6 +74,13 @@ class ProfileModel {
         email: email,
         jobTitle: jobTitle ?? this.jobTitle,
         dateOfBirth: dateOfBirth ?? this.dateOfBirth,
-        profileImage: profileImage ?? this.profileImage,
+        profileImage: profileImage is _Absent
+            ? this.profileImage
+            : profileImage as String?,
       );
+}
+
+// كلاس مساعد للـ sentinel — أنظف من الـ Object() المعلّق
+class _Absent {
+  const _Absent();
 }

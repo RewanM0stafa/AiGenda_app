@@ -9,12 +9,12 @@ import '../features/auth/logic/auth_cubit/auth_cubit.dart';
 import '../features/profile/data/repositories/profile_repository_impl.dart';
 import '../features/profile/domain/repositories/profile_repository.dart';
 import '../features/profile/logic/profile_cubit/profile_cubit.dart';
-import '../features/worksspace/data/data_source/workspace_remote_data_source.dart';
-import '../features/worksspace/data/repository/workspace_repository_impl.dart';
-import '../features/worksspace/domain/workspace_repository.dart';
-import '../features/worksspace/logic/member_cubit/member_cubit.dart';
-import '../features/worksspace/logic/permission_cubit/permission_cubit.dart';
-import '../features/worksspace/logic/workspace_cubit/workspace_cubit.dart';
+import '../features/workspace/data/data_source/workspace_remote_data_source.dart';
+import '../features/workspace/data/repository/workspace_repository_impl.dart';
+import '../features/workspace/domain/workspace_repository.dart';
+import '../features/workspace/logic/member_cubit/member_cubit.dart';
+import '../features/workspace/logic/permission_cubit/permission_cubit.dart';
+import '../features/workspace/logic/workspace_cubit/workspace_cubit.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -59,8 +59,11 @@ Future<void> setupDependencyInjection() async {
     ),
   );
 
-  getIt.registerLazySingleton<ProfileCubit>(
-        () => ProfileCubit(getIt<ProfileRepository>()),
+  // getIt.registerLazySingleton<ProfileCubit>(
+  //       () => ProfileCubit(getIt<ProfileRepository>()),
+  // );
+  getIt.registerFactory<ProfileCubit>(
+      () => ProfileCubit(getIt<ProfileRepository>()),
   );
 
   //  Workspaces

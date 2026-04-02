@@ -1,3 +1,4 @@
+import 'package:ajenda_app/core/storage/secure_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -52,11 +53,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is RegisterSuccess) {
+          final userId = await SecureStorageService().getUserId();
           context.push(
             RouteNames.confirmEmail,
-            extra: {'email': state.email, 'userId': ''},
+            extra: {'email': state.email, 'userId':userId ?? ''},
           );
         }
         if (state is RegisterFailure) showAuthError(context, state.message);

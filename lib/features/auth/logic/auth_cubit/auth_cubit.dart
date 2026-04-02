@@ -236,7 +236,7 @@ class AuthCubit extends Cubit<AuthState> {
         // ✅ حفظ التوكن (أهم خطوة)
         await storage.saveAccessToken(res.token);
         final token = await storage.getAccessToken();
-        print("TOKEN AFTER LOGIN: $token");
+        //print("TOKEN AFTER LOGIN: $token");
         // ✅ لو فيه refresh token
         if (res.refreshToken != null) {
           await storage.saveRefreshToken(res.refreshToken);

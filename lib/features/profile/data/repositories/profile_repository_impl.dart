@@ -1,3 +1,7 @@
+// ════════════════════════════════════════
+// data/repositories/profile_repository_impl.dart
+// Fix: updateProfile بيتعامل مع 204 (no body) بدل ما يعمل crash
+// ════════════════════════════════════════
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -15,8 +19,32 @@ class ProfileRepositoryImpl implements ProfileRepository {
 
   ProfileRepositoryImpl({required this.apiService});
 
+  // String _handleError(dynamic e) {
+  //   if (e is DioException) {
+  //     final data = e.response?.data;
+  //     if (data is Map) {
+  //       final pd = data['problemDetails'];
+  //       if (pd != null) {
+  //         final errors = pd['error'] as List?;
+  //         if (errors != null && errors.length >= 2) return errors[1].toString();
+  //         if (errors != null && errors.isNotEmpty) return errors[0].toString();
+  //         if (pd['title'] != null) return pd['title'].toString();
+  //       }
+  //       if (data['message'] != null) return data['message'].toString();
+  //     }
+  //     if (e.type == DioExceptionType.connectionTimeout ||
+  //         e.type == DioExceptionType.receiveTimeout) {
+  //       return 'Connection timeout. Check your internet.';
+  //     }
+  //     return 'Connection error. Check your internet.';
+  //   }
+  //   return 'Something went wrong. Please try again.';
+  // }
   String _handleError(dynamic e) {
-    if (e is DioException) {
+  if (e is DioException) {
+    
+    // ── Server رد بـ error (4xx, 5xx) ──
+    if (e.type == DioExceptionType.badResponse) {
       final data = e.response?.data;
       if (data is Map) {
         final pd = data['problemDetails'];
@@ -27,15 +55,28 @@ class ProfileRepositoryImpl implements ProfileRepository {
           if (pd['title'] != null) return pd['title'].toString();
         }
         if (data['message'] != null) return data['message'].toString();
+        if (data['title']   != null) return data['title'].toString();
       }
-      if (e.type == DioExceptionType.connectionTimeout ||
-          e.type == DioExceptionType.receiveTimeout) {
-        return 'Connection timeout. Check your internet.';
-      }
-      return 'Connection error. Check your internet.';
+      // لو مفيش body مفهوم
+      return 'Server error (${e.response?.statusCode}). Please try again.';
     }
-    return 'Something went wrong. Please try again.';
+
+    // ── Network errors ──
+    if (e.type == DioExceptionType.connectionTimeout ||
+        e.type == DioExceptionType.receiveTimeout    ||
+        e.type == DioExceptionType.sendTimeout) {
+      return 'Connection timeout. Check your internet.';
+    }
+
+    if (e.type == DioExceptionType.connectionError) {
+      return 'No internet connection. Please try again.';
+    }
+
+    // ── Fallback ──
+    return 'Connection error. Check your internet.';
   }
+  return 'Something went wrong. Please try again.';
+}
 
   @override
   Future<Either<String, ProfileModel>> getProfile() async {
@@ -48,17 +89,27 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<Either<String, ProfileModel>> updateProfile(UpdateProfileRequest request) async {
+  Future<Either<String, ProfileModel>> updateProfile(
+      UpdateProfileRequest request) async {
     try {
-      final response = await apiService.put(ApiEndpoints.updateMe, data: request.toJson());
-      return Right(ProfileModel.fromJson(response as Map<String, dynamic>));
+      final response =
+          await apiService.put(ApiEndpoints.updateMe, data: request.toJson());
+
+      // Fix: السيرفر ممكن يرجع 200 مع body أو 204 بدون body
+      if (response is Map<String, dynamic> && response.isNotEmpty) {
+        return Right(ProfileModel.fromJson(response));
+      }
+
+      // 204 No Content → نجيب الـ profile بـ GET عشان نرجع بيانات محدثة
+      return await getProfile();
     } catch (e) {
       return Left(_handleError(e));
     }
   }
 
   @override
-  Future<Either<String, void>> changePassword(ChangePasswordRequest request) async {
+  Future<Either<String, void>> changePassword(
+      ChangePasswordRequest request) async {
     try {
       await apiService.put(ApiEndpoints.changePassword, data: request.toJson());
       return const Right(null);
@@ -78,9 +129,11 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<Either<String, void>> confirmChangeEmail(ConfirmChangeEmailRequest request) async {
+  Future<Either<String, void>> confirmChangeEmail(
+      ConfirmChangeEmailRequest request) async {
     try {
-      await apiService.put(ApiEndpoints.confirmChangeEmail, data: request.toJson());
+      await apiService.put(ApiEndpoints.confirmChangeEmail,
+          data: request.toJson());
       return const Right(null);
     } catch (e) {
       return Left(_handleError(e));
@@ -88,30 +141,61 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
+  // Future<Either<String, String>> uploadAvatar(String filePath) async {
+  //   try {
+  //     final formData = FormData.fromMap({
+  //       'File': await MultipartFile.fromFile(filePath),
+  //     });
+
+  //     final response =
+  //         await apiService.post(ApiEndpoints.uploadAvatar, data: formData);
+
+  //     if (response is Map<String, dynamic>) {
+  //       final relativePath = response['avatarUrl'] ?? '';
+  //       if (relativePath.isNotEmpty) {
+  //         final fullUrl = relativePath.startsWith('http')
+  //             ? relativePath
+  //             : '${ApiEndpoints.baseUrl}$relativePath';
+  //         return Right(fullUrl);
+  //       }
+  //     }
+  //     return const Left('Could not parse image URL');
+  //   } catch (e) {
+  //     return Left(_handleError(e));
+  //   }
+  // }
   Future<Either<String, String>> uploadAvatar(String filePath) async {
-    try {
-      // استخدمنا 'File' بـ F كبيرة بناءً على الـ Swagger
-      final formData = FormData.fromMap({
-        'File': await MultipartFile.fromFile(filePath),
-      });
+  try {
+    final path     = filePath.toLowerCase();
+    final mimeType = path.endsWith('.png') ? 'image/png' : 'image/jpeg';
+    final fileName = path.endsWith('.png') ? 'avatar.png' : 'avatar.jpg';
 
-      final response = await apiService.post(ApiEndpoints.uploadAvatar, data: formData);
+    final formData = FormData.fromMap({
+      'File': await MultipartFile.fromFile(
+        filePath,
+        filename: fileName,
+        contentType: DioMediaType.parse(mimeType),
+      ),
+    });
 
-      if (response is Map<String, dynamic>) {
-        // بنستخدم الـ Key اللي شفناه في الـ Log وهو 'avatarUrl'
-        final relativePath = response['avatarUrl'] ?? '';
+    final response =
+        await apiService.post(ApiEndpoints.uploadAvatar, data: formData);
 
-        if (relativePath.isNotEmpty) {
-          // بنركب الـ BaseUrl مع المسار اللي راجع من السيرفر
-          final fullUrl = "${ApiEndpoints.baseUrl}$relativePath";
-          return Right(fullUrl);
-        }
+    if (response is Map<String, dynamic>) {
+      final relativePath = response['avatarUrl'] ?? '';
+      if (relativePath.isNotEmpty) {
+        final fullUrl = relativePath.startsWith('http')
+            ? relativePath
+            : '${ApiEndpoints.baseUrl}$relativePath';
+        return Right(fullUrl);
       }
-      return Left('Could not parse image URL');
-    } catch (e) {
-      return Left(_handleError(e));
     }
+    return const Left('Could not parse image URL');
+  } catch (e) {
+    return Left(_handleError(e));
   }
+}
+
 
   @override
   Future<Either<String, void>> deleteAvatar() async {

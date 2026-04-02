@@ -1,28 +1,15 @@
+import 'package:ajenda_app/core/network/api_endpoints.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import '../../../../../config/routes/route_names.dart';
-import '../../../../../core/constants/app_colors.dart';
-import '../../../../../core/constants/app_text_styles.dart';
-import '../../../../../core/constants/app_values.dart';
 import '../../../../core/storage/secure_storage_service.dart';
 import '../../../auth/presentation/widgets/auth_helpers.dart';
 import '../../logic/profile_cubit/profile_cubit.dart';
 import '../../logic/profile_cubit/profile_state.dart';
-import '../profile_widgets/profile_header_card.dart';
-import '../profile_widgets/profile_menu_card.dart';
 import '../profile_widgets/shared_profile_widgets.dart';
-
-// ════════════════════════════════════════════════════════════
-// 📁 features/profile/presentation/screens/profile_screen.dart
-// UI: Project A بالظبط
-// ════════════════════════════════════════════════════════════
-
-// ════════════════════════════════════════════════════════════
-// 📁 features/profile/presentation/screens/profile_screen.dart
-// ════════════════════════════════════════════════════════════
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -50,7 +37,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (state is ProfileLoading) {
             return const Center(
               child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF7C5CBF)),
+                valueColor:
+                    AlwaysStoppedAnimation<Color>(Color(0xFF7C5CBF)),
                 strokeWidth: 2.5,
               ),
             );
@@ -71,8 +59,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
-                  GestureDetector(onTap: () => context.pop(), child: backBtn()),
                   _buildTopBar(context),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: ProfileCard(
@@ -83,11 +71,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 6),
+
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // ── Account Section ──
                         const SectionLabel(label: 'Account'),
                         MenuCard(items: [
                           MenuItem(
@@ -95,10 +85,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             iconBg: const Color(0xFFEDE6FF),
                             iconColor: const Color(0xFF7C5CBF),
                             label: 'Edit Profile',
-                            sub: 'Update your info',
+                            sub: 'Update your personal info',
                             onTap: () async {
                               await context.push(RouteNames.editProfile);
-                              if (mounted) context.read<ProfileCubit>().refreshProfile();
+                              if (mounted) {
+                                context
+                                    .read<ProfileCubit>()
+                                    .refreshProfile();
+                              }
                             },
                           ),
                           MenuItem(
@@ -107,9 +101,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             iconColor: const Color(0xFF3B7ADE),
                             label: 'Change Password',
                             sub: 'Keep your account safe',
-                            onTap: () => context.push(RouteNames.changePassword),
+                            onTap: () =>
+                                context.push(RouteNames.changePassword),
+                          ),
+                          // ✅ Change Email — جديد هنا
+                          MenuItem(
+                            icon: Icons.email_outlined,
+                            iconBg: const Color(0xFFE8F5E9),
+                            iconColor: const Color(0xFF2E7D32),
+                            label: 'Change Email',
+                            sub: 'Update your email address',
+                            onTap: () async {
+                              await context.push(RouteNames.changeEmail);
+                              if (mounted) {
+                                context
+                                    .read<ProfileCubit>()
+                                    .refreshProfile();
+                              }
+                            },
                           ),
                         ]),
+
+                        // ── Preferences Section ──
                         const SectionLabel(label: 'Preferences'),
                         MenuCard(items: [
                           MenuItem(
@@ -118,7 +131,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             iconColor: const Color(0xFF1D9E75),
                             label: 'Dark Mode',
                             sub: 'Switch appearance',
-                            trailing: ToggleSwitch(value: false, onChanged: (_) {}),
+                            trailing: ToggleSwitch(
+                                value: false, onChanged: (_) {}),
                           ),
                           MenuItem(
                             icon: Icons.notifications_none_rounded,
@@ -138,13 +152,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ]),
                         const SizedBox(height: 14),
-                        SignOutButton(onTap: () => _showLogoutDialog(context)),
+
+                        SignOutButton(
+                            onTap: () => _showLogoutDialog(context)),
                         const SizedBox(height: 20),
+
                         Center(
                           child: Column(children: [
                             Text('Powered by',
                                 style: GoogleFonts.poppins(
-                                    fontSize: 10, color: const Color(0xFFC0BCDA))),
+                                    fontSize: 10,
+                                    color: const Color(0xFFC0BCDA))),
                             Text('ByteVerse',
                                 style: GoogleFonts.poppins(
                                     fontSize: 13,
@@ -183,7 +201,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: const Color(0xFFE8E4F5), width: 1.2),
+              border: Border.all(
+                  color: const Color(0xFFE8E4F5), width: 1.2),
             ),
             child: const Icon(Icons.settings_outlined,
                 color: Color(0xFF7C5CBF), size: 18),
@@ -197,21 +216,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20)),
         title: Text('Log Out',
             style: GoogleFonts.poppins(
-                fontWeight: FontWeight.w700, color: const Color(0xFF1E0F5C))),
+                fontWeight: FontWeight.w700,
+                color: const Color(0xFF1E0F5C))),
         content: Text('Are you sure you want to log out?',
-            style: GoogleFonts.poppins(fontSize: 13, color: const Color(0xFF8A84A3))),
+            style: GoogleFonts.poppins(
+                fontSize: 13, color: const Color(0xFF8A84A3))),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text('Cancel',
-                style: GoogleFonts.poppins(color: const Color(0xFF8A84A3))),
+                style: GoogleFonts.poppins(
+                    color: const Color(0xFF8A84A3))),
           ),
           TextButton(
             onPressed: () async {
               Navigator.pop(context);
+              // ✅ revokeToken قبل الـ clearAll
+              final token =
+                  await SecureStorageService().getAccessToken();
+              final refresh =
+                  await SecureStorageService().getRefreshToken();
+              if (token != null && refresh != null) {
+                try {
+                  final dio = Dio()
+                    ..options.baseUrl = ApiEndpoints.baseUrl;
+                  await dio.put(ApiEndpoints.revokeToken, data: {
+                    'token': token,
+                    'refreshToken': refresh,
+                  });
+                } catch (_) {}
+              }
               await SecureStorageService().clearAll();
               if (context.mounted) context.go(RouteNames.login);
             },
