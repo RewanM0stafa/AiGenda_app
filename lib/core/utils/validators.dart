@@ -1,7 +1,10 @@
 class AppValidators {
 
-  static String? requiredField(String? value, {String fieldName = 'This field'}) {
-    bool isRequired = (value == null || value.trim().isEmpty);
+  static String? requiredField(String? value,
+      {String fieldName = 'This field'}) {
+    bool isRequired = (value == null || value
+        .trim()
+        .isEmpty);
     if (isRequired) {
       return '$fieldName is required.';
     }
@@ -10,12 +13,14 @@ class AppValidators {
 
 
   static String? validateUsername(String? value) {
-    bool isRequired = (value == null || value.trim().isEmpty);
+    bool isRequired = (value == null || value
+        .trim()
+        .isEmpty);
     if (isRequired) {
       return 'Please enter your username.';
     }
-    if (value.length < 3) {
-      return 'Username must be at least 3 characters.';
+    if (value.length < 2) {
+      return 'Username must be at least 2 characters.';
     }
     return null;
   }
@@ -50,5 +55,4 @@ class AppValidators {
     if (value != original) return 'Passwords do not match.';
     return null;
   }
-
 }

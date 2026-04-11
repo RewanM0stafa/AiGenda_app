@@ -45,6 +45,7 @@ dependencies:
   image_picker: ^1.2.1
   image_picker_windows: ^0.2.2 # ضيفي دي لو لسه الإيرور موجود بعد الرن
   flutter_svg: ^2.2.4
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
