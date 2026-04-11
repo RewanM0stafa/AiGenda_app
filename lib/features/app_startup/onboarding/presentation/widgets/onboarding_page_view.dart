@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../data/models/onboarding_model.dart';
 
 class OnboardingPageView extends StatelessWidget {
-  //final OnboardingModel model;
   final OnboardingModel dataModel;
 
   const OnboardingPageView({super.key, required this.dataModel});
