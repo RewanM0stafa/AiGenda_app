@@ -1,7 +1,3 @@
-// onboarding/presentation/widgets/onboarding_button.dart
-// مش محتاجينه كـ separate widget بعد كده
-// بس لو محتاجاه لملفات تانية:
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../../core/constants/app_colors.dart';
