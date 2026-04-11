@@ -1,4 +1,5 @@
 import 'package:ajenda_app/core/network/api_keys.dart';
+import 'package:ajenda_app/main.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/app_startup/onboarding/presentation/screens/onboarding_screen.dart';
 import '../../features/app_startup/splash/presentation/screens/splash_screen.dart';
@@ -22,7 +23,7 @@ import 'route_names.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: RouteNames.splash,
+  initialLocation: RouteNames.splash /*RouteNames.welcome*/ ,
   routes: [
     GoRoute(
       path: RouteNames.splash,
@@ -32,11 +33,11 @@ final GoRouter appRouter = GoRouter(
       path: RouteNames.onboarding,
       builder: (context, state) => const OnboardingScreen(),
     ),
-    // GoRoute(
-    //   path: RouteNames.welcome,
-    //   name: 'welcome',
-    //   builder: (context, state) => const WelcomeScreen(),
-    // ),
+    GoRoute(
+      path: RouteNames.welcome,
+      name: 'welcome',
+      builder: (context, state) => const HomeScreen(),
+    ),
 
     //  Login
     GoRoute(
