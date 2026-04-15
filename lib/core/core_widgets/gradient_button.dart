@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import '../constants/app_colors.dart';
 import '../constants/app_text_styles.dart';
 import '../constants/app_values.dart';
 import '../constants/app_widget_styles.dart';
@@ -31,8 +31,10 @@ class _GradientButtonState extends State<GradientButton>
   void initState() {
     super.initState();
     _press = AnimationController(vsync: this, duration: AppValues.animFast);
-    _scale = Tween<double>(begin: 1.0, end: 0.97)
-        .animate(CurvedAnimation(parent: _press, curve: Curves.easeInOut));
+    _scale = Tween<double>(
+      begin: 1.0,
+      end: 0.97,
+    ).animate(CurvedAnimation(parent: _press, curve: Curves.easeInOut));
   }
 
   @override
@@ -59,17 +61,16 @@ class _GradientButtonState extends State<GradientButton>
           alignment: Alignment.center,
           child: widget.isLoading
               ? const SizedBox(
-            width: 24,
-            height: 24,
-            child: CircularProgressIndicator(
-              color: Colors.white,
-              strokeWidth: 2.5,
-            ),
-          )
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    color: AppColors.white,
+                    strokeWidth: 2.5,
+                  ),
+                )
               : Text(widget.label, style: AppTextStyles.buttonText),
         ),
       ),
     );
   }
 }
- 

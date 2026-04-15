@@ -10,9 +10,13 @@ class AuthOrDivider extends StatelessWidget {
         Expanded(child: Container(height: 1, color: const Color(0xFFE8E4F5))),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14),
-          child: Text('Or continue with',
-              style: GoogleFonts.poppins(
-                  fontSize: 12, color: const Color(0xFF8A84A3))),
+          child: Text(
+            'Or continue with',
+            style: GoogleFonts.poppins(
+              fontSize: 12,
+              color: const Color(0xFF8A84A3),
+            ),
+          ),
         ),
         Expanded(child: Container(height: 1, color: const Color(0xFFE8E4F5))),
       ],

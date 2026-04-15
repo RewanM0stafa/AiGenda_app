@@ -25,7 +25,7 @@ class OnboardingIndicator extends StatelessWidget {
           decoration: BoxDecoration(
             color: currentIndex == index
                 ? AppColors.primary
-                : AppColors.textHint, // ألوان موحدة من ملفك
+                : AppColors.textHint,
             borderRadius: BorderRadius.circular(4),
           ),
         ),

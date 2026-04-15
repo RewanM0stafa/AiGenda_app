@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../../../core/constants/app_assets.dart';
 import '../../../../core/core_widgets/social_button.dart';
 

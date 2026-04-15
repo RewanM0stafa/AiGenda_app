@@ -1,8 +1,8 @@
-
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_values.dart';
+import '../../../../core/constants/app_icons.dart';
 import 'profile_menu_item.dart';
 
 class ProfileMenuCard extends StatefulWidget {
@@ -26,7 +26,11 @@ class _ProfileMenuCardState extends State<ProfileMenuCard> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-          AppValues.horizontalPadding, 24, AppValues.horizontalPadding, 0),
+        AppValues.horizontalPadding,
+        24,
+        AppValues.horizontalPadding,
+        0,
+      ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(AppValues.radiusCard),
         child: BackdropFilter(
@@ -50,28 +54,28 @@ class _ProfileMenuCardState extends State<ProfileMenuCard> {
             child: Column(
               children: [
                 ProfileMenuItem(
-                  icon: Icons.person_outline_rounded,
+                  icon: AppIcons.person,
                   title: 'Accounts',
                   subtitle: 'Manage your accounts',
                   onTap: widget.onAccountsTap,
                 ),
                 _divider(),
                 ProfileMenuItem(
-                  icon: Icons.language_rounded,
+                  icon: AppIcons.language,
                   title: 'Language',
                   subtitle: 'You can change the app language',
                   onTap: () {},
                 ),
                 _divider(),
                 ProfileMenuItem(
-                  icon: Icons.lock_outline_rounded,
+                  icon: AppIcons.lockFilled,
                   title: 'Screen Lock',
                   subtitle: 'Manage Touch ID or Face ID',
                   onTap: () {},
                 ),
                 _divider(),
                 ProfileMenuItem(
-                  icon: Icons.brightness_medium_rounded,
+                  icon: AppIcons.brightness,
                   title: 'Light Mode',
                   subtitle: 'Switch between light & dark mode',
                   trailing: Switch(
@@ -83,14 +87,14 @@ class _ProfileMenuCardState extends State<ProfileMenuCard> {
                 ),
                 _divider(),
                 ProfileMenuItem(
-                  icon: Icons.star_outline_rounded,
+                  icon: AppIcons.star,
                   title: 'Rate',
                   titleSuffix: ' AiGenda',
                   onTap: () {},
                 ),
                 _divider(),
                 ProfileMenuItem(
-                  icon: Icons.logout_rounded,
+                  icon: AppIcons.logout,
                   title: 'Log Out',
                   isDestructive: true,
                   onTap: widget.onLogoutTap,

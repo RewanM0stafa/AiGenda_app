@@ -37,10 +37,12 @@ class PermissionsCubit extends Cubit<PermissionsState> {
       updated.add(permission);
     }
 
-    emit(current.copyWith(
-      selectedPermissions: updated,
-      role: WorkspaceRole.custom,
-    ));
+    emit(
+      current.copyWith(
+        selectedPermissions: updated,
+        role: WorkspaceRole.custom,
+      ),
+    );
   }
 
   Future<void> updatePermissions({
@@ -77,16 +79,23 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   }
 
   WorkspaceRole _detectRole(List<String> userPermissions) {
-    final userExtra = userPermissions.where((p) => AppPermissions.all.contains(p)).toSet();
+    final userExtra = userPermissions
+        .where((p) => AppPermissions.all.contains(p))
+        .toSet();
 
-    // 2. المقارنة
     if (userExtra.isEmpty) return WorkspaceRole.viewer;
 
-    if (_setEquals(userExtra, RolePermissionsMapper.map(WorkspaceRole.admin).toSet())) {
+    if (_setEquals(
+      userExtra,
+      RolePermissionsMapper.map(WorkspaceRole.admin).toSet(),
+    )) {
       return WorkspaceRole.admin;
     }
 
-    if (_setEquals(userExtra, RolePermissionsMapper.map(WorkspaceRole.editor).toSet())) {
+    if (_setEquals(
+      userExtra,
+      RolePermissionsMapper.map(WorkspaceRole.editor).toSet(),
+    )) {
       return WorkspaceRole.editor;
     }
 
@@ -97,5 +106,4 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     if (a.length != b.length) return false;
     return a.containsAll(b);
   }
-
 }

@@ -36,12 +36,9 @@ class WorkspaceRemoteDataSource {
   }
 
   Future<List<MemberModel>> getMembers(int workspaceId) async {
-    final response =
-    await dio.get(ApiEndpoints.members(workspaceId));
+    final response = await dio.get(ApiEndpoints.members(workspaceId));
 
-    return (response.data as List)
-        .map((e) => MemberModel.fromJson(e))
-        .toList();
+    return (response.data as List).map((e) => MemberModel.fromJson(e)).toList();
   }
 
   Future<void> addMember(int workspaceId, String email) async {
@@ -52,10 +49,10 @@ class WorkspaceRemoteDataSource {
   }
 
   Future<void> updatePermissions(
-      int workspaceId,
-      String userId,
-      List<String> permissions,
-      ) async {
+    int workspaceId,
+    String userId,
+    List<String> permissions,
+  ) async {
     await dio.put(
       ApiEndpoints.updatePermissions(workspaceId, userId),
       data: {ApiKeys.permissions: permissions},

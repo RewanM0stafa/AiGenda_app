@@ -1,4 +1,3 @@
-
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../../../../../core/constants/app_values.dart';
@@ -26,5 +25,3 @@ class AuthFormCard extends StatelessWidget {
     );
   }
 }
- 
- 

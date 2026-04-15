@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../domain/workspace_repository.dart';
 import 'workspace_state.dart';
 
@@ -8,7 +7,7 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
 
   WorkspaceCubit(this.repository) : super(WorkspaceInitial());
 
-  // 🔹 GET ALL WORKSPACES
+  //  GET ALL WORKSPACES
   Future<void> getWorkspaces() async {
     try {
       emit(WorkspaceLoading());
@@ -21,7 +20,7 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
     }
   }
 
-  // 🔹 CREATE WORKSPACE
+  //  CREATE WORKSPACE
   Future<void> createWorkspace({
     required String name,
     required String description,
@@ -38,16 +37,13 @@ class WorkspaceCubit extends Cubit<WorkspaceState> {
         visibility: visibility,
       );
 
-      // 🔥 بعد الإنشاء نعمل refresh
       await getWorkspaces();
     } catch (e) {
       emit(WorkspaceError(_handleError(e)));
     }
   }
 
-  // 🔹 ERROR HANDLER (مهم جدًا)
   String _handleError(dynamic error) {
-    // ممكن بعدين تربطيها بال DioError
     return error.toString();
   }
 }

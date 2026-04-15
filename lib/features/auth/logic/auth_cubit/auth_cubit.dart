@@ -220,7 +220,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit(this.repo, this.storage) : super(AuthInitial());
 
-  // ─────────── LOGIN ───────────
+  //  LOGIN
   Future<void> login(String email, String password) async {
     emit(LoginLoading());
 
@@ -229,60 +229,52 @@ class AuthCubit extends Cubit<AuthState> {
     );
 
     await result.fold(
-          (err) async {
+      (err) async {
         emit(LoginFailure(err));
       },
-          (res) async {
-        // ✅ حفظ التوكن (أهم خطوة)
+      (res) async {
         await storage.saveAccessToken(res.token);
         final token = await storage.getAccessToken();
         print("TOKEN AFTER LOGIN: $token");
-        // ✅ لو فيه refresh token
         if (res.refreshToken != null) {
           await storage.saveRefreshToken(res.refreshToken);
         }
 
-        // ✅ حفظ بيانات اليوزر (اختياري بس مفيد)
         await storage.saveUserData(
           userId: res.id,
           email: res.email,
           firstName: res.firstName,
           lastName: res.lastName,
         );
-
-        emit(LoginSuccess(
-          token: res.token,
-          userId: res.id,
-          firstName: res.firstName,
-          lastName: res.lastName,
-        ));
+        print("USER ID AFTER LOGIN: ${res.id}");
+        emit(
+          LoginSuccess(
+            token: res.token,
+            userId: res.id,
+            firstName: res.firstName,
+            lastName: res.lastName,
+          ),
+        );
       },
     );
   }
 
-  // ─────────── REGISTER ───────────
+  //  REGISTER
   Future<void> register(RegisterRequest request) async {
     emit(RegisterLoading());
 
     final result = await repo.register(request);
 
-    // بنستخدم fold عشان نتعامل مع الـ Either
-    await result.fold(
-          (err) async => emit(RegisterFailure(err)),
-          (_) async {
-        // نسرق الـ ID من الاستورج اللي الـ Repo لسه مسيفه حالا
-        final savedId = await storage.getUserId() ?? '';
-        emit(RegisterSuccess(email: request.email, userId: savedId));
-      },
-    );
+    await result.fold((err) async => emit(RegisterFailure(err)), (_) async {
+      final savedId = await storage.getUserId() ?? '';
+      emit(RegisterSuccess(email: request.email, userId: savedId));
+    });
   }
 
-  // ─────────── CONFIRM EMAIL ───────────
-  // داخل كلاس AuthCubit
+  //  CONFIRM EMAIL
   Future<void> confirmEmail({String? userId, required String code}) async {
     emit(ConfirmEmailLoading());
 
-    // صمام أمان: لو الـ ID مش جاي من الـ UI، هاته من الاستورج
     final finalUserId = userId ?? await storage.getUserId();
 
     if (finalUserId == null || finalUserId.isEmpty) {
@@ -295,12 +287,12 @@ class AuthCubit extends Cubit<AuthState> {
     );
 
     result.fold(
-          (err) => emit(ConfirmEmailFailure(err)),
-          (_) => emit(ConfirmEmailSuccess()),
+      (err) => emit(ConfirmEmailFailure(err)),
+      (_) => emit(ConfirmEmailSuccess()),
     );
   }
 
-  // ─────────── RESEND EMAIL ───────────
+  //  RESEND EMAIL
   Future<void> resendConfirmEmail(String email) async {
     emit(ResendEmailLoading());
 
@@ -309,12 +301,12 @@ class AuthCubit extends Cubit<AuthState> {
     );
 
     result.fold(
-          (err) => emit(ResendEmailFailure(err)),
-          (_) => emit(ResendEmailSuccess()),
+      (err) => emit(ResendEmailFailure(err)),
+      (_) => emit(ResendEmailSuccess()),
     );
   }
 
-  // ─────────── FORGET PASSWORD ───────────
+  //  FORGET PASSWORD
   Future<void> forgetPassword(String email) async {
     emit(ForgetPasswordLoading());
 
@@ -323,12 +315,12 @@ class AuthCubit extends Cubit<AuthState> {
     );
 
     result.fold(
-          (err) => emit(ForgetPasswordFailure(err)),
-          (_) => emit(ForgetPasswordSuccess(email)),
+      (err) => emit(ForgetPasswordFailure(err)),
+      (_) => emit(ForgetPasswordSuccess(email)),
     );
   }
 
-  // ─────────── RESET PASSWORD ───────────
+  //  RESET PASSWORD
   Future<void> resetPassword({
     required String email,
     required String code,
@@ -337,20 +329,16 @@ class AuthCubit extends Cubit<AuthState> {
     emit(ResetPasswordLoading());
 
     final result = await repo.resetPassword(
-      ResetPasswordRequest(
-        email: email,
-        code: code,
-        newPassword: newPassword,
-      ),
+      ResetPasswordRequest(email: email, code: code, newPassword: newPassword),
     );
 
     result.fold(
-          (err) => emit(ResetPasswordFailure(err)),
-          (_) => emit(ResetPasswordSuccess()),
+      (err) => emit(ResetPasswordFailure(err)),
+      (_) => emit(ResetPasswordSuccess()),
     );
   }
 
-  // ─────────── LOGOUT ───────────
+  //  LOGOUT
   Future<void> logout() async {
     emit(LogoutLoading());
 

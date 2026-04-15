@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_values.dart';
@@ -18,10 +17,8 @@ class _AuthBackgroundState extends State<AuthBackground>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: AppValues.animBlob,
-    )..repeat(reverse: true);
+    _controller = AnimationController(vsync: this, duration: AppValues.animBlob)
+      ..repeat(reverse: true);
   }
 
   @override
@@ -36,35 +33,51 @@ class _AuthBackgroundState extends State<AuthBackground>
       animation: _controller,
       builder: (context, _) => Stack(
         children: [
-          // ── Base Gradient ──
-          Container(decoration: const BoxDecoration(gradient: AppColors.backgroundGradient)),
+          //  Base Gradient
+          Container(
+            decoration: const BoxDecoration(
+              gradient: AppColors.backgroundGradient,
+            ),
+          ),
 
-          // ── Blob Top Left ──
+          //  Blob Top Left
           Positioned(
             top: -80 + (_controller.value * 30),
             left: -60,
-            child: _Blob(size: 280, color: AppColors.gradientPurple.withOpacity(0.18)),
+            child: _Blob(
+              size: 280,
+              color: AppColors.gradientPurple.withOpacity(0.18),
+            ),
           ),
 
-          // ── Blob Top Right ──
+          //  Blob Top Right
           Positioned(
             top: 100 - (_controller.value * 20),
             right: -80,
-            child: _Blob(size: 220, color: AppColors.gradientBlue.withOpacity(0.15)),
+            child: _Blob(
+              size: 220,
+              color: AppColors.gradientBlue.withOpacity(0.15),
+            ),
           ),
 
-          // ── Blob Bottom Center ──
+          //  Blob Bottom Center
           Positioned(
             bottom: -60 + (_controller.value * 25),
             left: MediaQuery.of(context).size.width * 0.2,
-            child: _Blob(size: 300, color: AppColors.gradientLight.withOpacity(0.12)),
+            child: _Blob(
+              size: 300,
+              color: AppColors.gradientLight.withOpacity(0.12),
+            ),
           ),
 
-          // ── Blob Bottom Right ──
+          //  Blob Bottom Right
           Positioned(
             bottom: 100,
             right: -40,
-            child: _Blob(size: 180, color: AppColors.gradientBlue.withOpacity(0.10)),
+            child: _Blob(
+              size: 180,
+              color: AppColors.gradientBlue.withOpacity(0.10),
+            ),
           ),
 
           widget.child,
@@ -96,5 +109,3 @@ class _Blob extends StatelessWidget {
     );
   }
 }
- 
- 

@@ -84,7 +84,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Expanded(
                       child: LabeledAuthField(
                         label: 'First Name',
-                        hint: 'Rewan',
+                        hint: '',
                         controller: _firstNameCtrl,
                         prefixIcon: AppIcons.person,
                         enabled: !isLoading,
@@ -96,7 +96,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Expanded(
                       child: LabeledAuthField(
                         label: 'Last Name',
-                        hint: 'Ahmed',
+                        hint: '',
                         controller: _lastNameCtrl,
                         prefixIcon: AppIcons.person,
                         enabled: !isLoading,
@@ -123,7 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   label: 'Password',
                   hint: AppStrings.passwordHint,
                   controller: _passwordCtrl,
-                  prefixIcon: AppIcons.lock,
+                  prefixIcon: AppIcons.key,
                   obscure: _obscurePass,
                   enabled: !isLoading,
                   suffixIcon: AuthEyeToggle(
@@ -139,7 +139,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   label: 'Confirm Password',
                   hint: AppStrings.confirmPasswordHint,
                   controller: _confirmCtrl,
-                  prefixIcon: AppIcons.lock,
+                  prefixIcon: AppIcons.key,
                   obscure: _obscureConfirm,
                   enabled: !isLoading,
                   suffixIcon: AuthEyeToggle(
@@ -193,7 +193,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 const SizedBox(height: 24),
 
-                // ── Footer ──
+                //  Footer
                 AuthFooter(
                   leadingText: AppStrings.alreadyHaveAccount,
                   actionText: AppStrings.signIn,

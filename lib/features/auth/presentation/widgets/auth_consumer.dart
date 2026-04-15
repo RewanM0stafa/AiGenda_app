@@ -51,5 +51,3 @@ class AuthConsumer extends StatelessWidget {
     );
   }
 }
-
-

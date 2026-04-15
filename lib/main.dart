@@ -1,19 +1,14 @@
 import 'package:ajenda_app/core/constants/app_colors.dart';
 import 'package:flutter/material.dart';
-
 import 'config/dependency_injection.dart';
 import 'config/routes/app_routers.dart';
-
-import 'package:flutter/material.dart';
 import 'core/constants/app_text_styles.dart';
 import 'core/constants/app_values.dart';
 import 'core/constants/app_widget_styles.dart';
 
-
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // بننادي على الدالة اللي عملناها في ملف الـ DI
   setupDependencyInjection();
   runApp(const MyApp());
 }
@@ -28,8 +23,7 @@ class MyApp extends StatelessWidget {
       routerConfig: appRouter,
       title: 'Flutter Demo',
       theme: ThemeData(
-
-       // colorScheme: AppColors.white,
+        // colorScheme: AppColors.white,
       ),
 
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -74,7 +68,6 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 */
 
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
@@ -82,7 +75,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      // يمكن إضافة BottomNavigationBar هنا لاحقاً
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(
@@ -122,13 +114,20 @@ class HomeScreen extends StatelessWidget {
           children: [
             const CircleAvatar(
               radius: 24,
-              backgroundImage: NetworkImage('https://via.placeholder.com/150'), // استبدليها بصورة المستخدم
+              backgroundImage: NetworkImage(
+                'https://via.placeholder.com/150',
+              ), // استبدليها بصورة المستخدم
             ),
             const SizedBox(width: 12),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Hello!', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.primary)),
+                Text(
+                  'Hello!',
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: AppColors.primary,
+                  ),
+                ),
                 Text('Livia Vaccaro', style: AppTextStyles.headlineMedium),
               ],
             ),
@@ -162,7 +161,8 @@ class HomeScreen extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(AppValues.cardPadding),
-      decoration: AppWidgetStyles.gradientButton, // استخدام الـ Gradient الخاص بكِ
+      decoration:
+          AppWidgetStyles.gradientButton, // استخدام الـ Gradient الخاص بكِ
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -172,18 +172,25 @@ class HomeScreen extends StatelessWidget {
               children: [
                 Text(
                   'Your today\'s task\nalmost done!',
-                  style: AppTextStyles.authCardTitle.copyWith(color: AppColors.white),
+                  style: AppTextStyles.authCardTitle.copyWith(
+                    color: AppColors.white,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(AppValues.radiusLg),
                   ),
                   child: Text(
                     'View Task',
-                    style: AppTextStyles.buttonText.copyWith(color: AppColors.primary),
+                    style: AppTextStyles.buttonText.copyWith(
+                      color: AppColors.primary,
+                    ),
                   ),
                 ),
               ],
@@ -195,12 +202,17 @@ class HomeScreen extends StatelessWidget {
             width: 70,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border: Border.all(color: AppColors.white.withOpacity(0.3), width: 6),
+              border: Border.all(
+                color: AppColors.white.withOpacity(0.3),
+                width: 6,
+              ),
             ),
             child: Center(
               child: Text(
                 '85%',
-                style: AppTextStyles.titleMedium.copyWith(color: AppColors.white),
+                style: AppTextStyles.titleMedium.copyWith(
+                  color: AppColors.white,
+                ),
               ),
             ),
           ),
@@ -236,7 +248,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
           ),
-        ]
+        ],
       ],
     );
   }
@@ -264,7 +276,11 @@ class HomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Office Project', style: AppTextStyles.bodySmall),
-                    Icon(Icons.work_outline, color: AppColors.instructionPink, size: 16),
+                    Icon(
+                      Icons.work_outline,
+                      color: AppColors.instructionPink,
+                      size: 16,
+                    ),
                   ],
                 ),
                 Text(
@@ -275,7 +291,9 @@ class HomeScreen extends StatelessWidget {
                 LinearProgressIndicator(
                   value: 0.7,
                   backgroundColor: AppColors.cardBorder,
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.gradientBlue),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    AppColors.gradientBlue,
+                  ),
                   borderRadius: BorderRadius.circular(8),
                 ),
               ],
@@ -319,7 +337,9 @@ class HomeScreen extends StatelessWidget {
               ),
               Text(
                 '70%',
-                style: AppTextStyles.titleMedium.copyWith(color: AppColors.instructionPink),
+                style: AppTextStyles.titleMedium.copyWith(
+                  color: AppColors.instructionPink,
+                ),
               ),
             ],
           ),

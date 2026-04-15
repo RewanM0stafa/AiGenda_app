@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../../core/constants/app_colors.dart';
@@ -53,8 +52,7 @@ class UnderlineTextField extends StatelessWidget {
               borderSide: BorderSide(color: Color(0xFFE0D8F0)),
             ),
             enabledBorder: UnderlineInputBorder(
-              borderSide:
-              BorderSide(color: AppColors.primary.withOpacity(0.2)),
+              borderSide: BorderSide(color: AppColors.primary.withOpacity(0.2)),
             ),
             focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: AppColors.primary, width: 1.5),
@@ -71,4 +69,3 @@ class UnderlineTextField extends StatelessWidget {
     );
   }
 }
-

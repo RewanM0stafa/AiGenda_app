@@ -21,16 +21,12 @@ class AuthFooter extends StatelessWidget {
       child: GestureDetector(
         onTap: isLoading ? null : onActionTap,
         child: RichText(
-          text: TextSpan(children: [
-            TextSpan(
-              text: '$leadingText  ',
-              style: AppTextStyles.hintStyle,
-            ),
-            TextSpan(
-              text: actionText,
-              style: AppTextStyles.authLink,
-            ),
-          ]),
+          text: TextSpan(
+            children: [
+              TextSpan(text: '$leadingText  ', style: AppTextStyles.hintStyle),
+              TextSpan(text: actionText, style: AppTextStyles.authLink),
+            ],
+          ),
         ),
       ),
     );

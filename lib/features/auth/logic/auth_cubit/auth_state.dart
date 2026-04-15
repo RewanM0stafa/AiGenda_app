@@ -156,6 +156,7 @@ class RegisterFailure extends AuthState {
 
 // ── Confirm Email ──
 class ConfirmEmailLoading extends AuthState {}
+
 class ConfirmEmailSuccess extends AuthState {}
 
 class ConfirmEmailFailure extends AuthState {
@@ -165,6 +166,7 @@ class ConfirmEmailFailure extends AuthState {
 
 // ── Resend Email ──
 class ResendEmailLoading extends AuthState {}
+
 class ResendEmailSuccess extends AuthState {}
 
 class ResendEmailFailure extends AuthState {
@@ -187,6 +189,7 @@ class ForgetPasswordFailure extends AuthState {
 
 // ── Reset Password ──
 class ResetPasswordLoading extends AuthState {}
+
 class ResetPasswordSuccess extends AuthState {}
 
 class ResetPasswordFailure extends AuthState {
@@ -196,6 +199,7 @@ class ResetPasswordFailure extends AuthState {
 
 // ── Logout ──
 class LogoutLoading extends AuthState {}
+
 class LogoutSuccess extends AuthState {}
 
 class LogoutFailure extends AuthState {

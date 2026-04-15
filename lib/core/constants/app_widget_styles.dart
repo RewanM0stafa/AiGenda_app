@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'app_colors.dart';
 import 'app_values.dart';
@@ -15,10 +14,7 @@ class AppWidgetStyles {
       ],
     ),
     borderRadius: BorderRadius.circular(radius ?? AppValues.radiusCard),
-    border: Border.all(
-      color: AppColors.white.withOpacity(0.6),
-      width: 1.5,
-    ),
+    border: Border.all(color: AppColors.white.withOpacity(0.6), width: 1.5),
     boxShadow: [
       BoxShadow(
         color: AppColors.primary.withOpacity(0.08),
@@ -62,19 +58,14 @@ class AppWidgetStyles {
         AppColors.gradientPurple.withOpacity(0.12),
       ],
     ),
-    border: Border.all(
-      color: AppColors.primary.withOpacity(0.4),
-      width: 1.5,
-    ),
+    border: Border.all(color: AppColors.primary.withOpacity(0.4), width: 1.5),
   );
 
   // ── Social Button ──
   static BoxDecoration socialButton = BoxDecoration(
     borderRadius: BorderRadius.circular(AppValues.radiusLg),
     color: AppColors.white.withOpacity(0.1),
-    border: Border.all(
-      color: AppColors.white.withOpacity(0.15),
-    ),
+    border: Border.all(color: AppColors.white.withOpacity(0.15)),
   );
 
   // ── Icon Container ──
@@ -90,4 +81,3 @@ class AppWidgetStyles {
     ],
   );
 }
- 

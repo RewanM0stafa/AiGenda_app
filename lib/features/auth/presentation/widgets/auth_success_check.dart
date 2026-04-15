@@ -13,7 +13,7 @@ class AuthSuccessCheck extends StatelessWidget {
             width: 90,
             height: 90,
             decoration: BoxDecoration(
-              color: const Color(0xFFE8FFF0), // لون أخضر فاتح مريح للعين
+              color: const Color(0xFFE8FFF0),
               shape: BoxShape.circle,
               border: Border.all(
                 color: AppColors.success,
@@ -34,8 +34,6 @@ class AuthSuccessCheck extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-          // الـ Title والـ Subtitle هيتعرضوا تلقائياً من الـ AuthConsumer
-          // لأننا بنغير الـ title بناءً على حالة الـ isSuccess
         ],
       ),
     );

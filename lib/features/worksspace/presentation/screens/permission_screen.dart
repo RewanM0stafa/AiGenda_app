@@ -6,19 +6,25 @@ import '../../../roles/models/workspce_role.dart';
 import '../../logic/permission_cubit/permission_cubit.dart';
 import '../../logic/permission_cubit/permission_state.dart';
 
-
 class PermissionsScreen extends StatelessWidget {
   final int workspaceId;
   final String userId;
 
-  const PermissionsScreen({super.key, required this.workspaceId, required this.userId});
+  const PermissionsScreen({
+    super.key,
+    required this.workspaceId,
+    required this.userId,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Manage Member Permissions")),
       body: const _PermissionsBody(),
-      bottomNavigationBar: _SaveButton(workspaceId: workspaceId, userId: userId),
+      bottomNavigationBar: _SaveButton(
+        workspaceId: workspaceId,
+        userId: userId,
+      ),
     );
   }
 }
@@ -30,7 +36,8 @@ class _PermissionsBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PermissionsCubit, PermissionsState>(
       builder: (context, state) {
-        if (state is PermissionsError) return Center(child: Text(state.message));
+        if (state is PermissionsError)
+          return Center(child: Text(state.message));
         if (state is PermissionsLoaded) {
           return CustomScrollView(
             slivers: [
@@ -65,9 +72,14 @@ class _PermissionsBody extends StatelessWidget {
     );
   }
 
-  List<Widget> _buildPermissionGroups(PermissionsLoaded state, BuildContext context) {
+  List<Widget> _buildPermissionGroups(
+    PermissionsLoaded state,
+    BuildContext context,
+  ) {
     final Map<String, List<String>> groups = {
-      'Spaces': AppPermissions.all.where((p) => p.startsWith('spaces')).toList(),
+      'Spaces': AppPermissions.all
+          .where((p) => p.startsWith('spaces'))
+          .toList(),
       'Tasks': AppPermissions.all.where((p) => p.startsWith('tasks')).toList(),
       'Notes': AppPermissions.all.where((p) => p.startsWith('notes')).toList(),
     };
@@ -78,26 +90,31 @@ class _PermissionsBody extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(16, 20, 16, 8),
-              child: Text(entry.key, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              child: Text(
+                entry.key,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
           SliverList(
-            delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                final permission = entry.value[index];
-                final isSelected = state.selectedPermissions.contains(permission);
+            delegate: SliverChildBuilderDelegate((context, index) {
+              final permission = entry.value[index];
+              final isSelected = state.selectedPermissions.contains(permission);
 
-                final displayName = permission.split(':')[1].toUpperCase();
+              final displayName = permission.split(':')[1].toUpperCase();
 
-                return CheckboxListTile(
-                  title: Text(displayName),
-                  value: isSelected,
-                  onChanged: (_) => context.read<PermissionsCubit>().togglePermission(permission),
-                  controlAffinity: ListTileControlAffinity.trailing,
-                );
-              },
-              childCount: entry.value.length,
-            ),
+              return CheckboxListTile(
+                title: Text(displayName),
+                value: isSelected,
+                onChanged: (_) => context
+                    .read<PermissionsCubit>()
+                    .togglePermission(permission),
+                controlAffinity: ListTileControlAffinity.trailing,
+              );
+            }, childCount: entry.value.length),
           ),
         ],
       );
@@ -123,7 +140,8 @@ class _RoleSelector extends StatelessWidget {
                 label: Text(role.name.toUpperCase()),
                 selected: state.role == role,
                 onSelected: (selected) {
-                  if (selected) context.read<PermissionsCubit>().changeRole(role);
+                  if (selected)
+                    context.read<PermissionsCubit>().changeRole(role);
                 },
               ),
             );
@@ -147,14 +165,20 @@ class _SaveButton extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.all(16),
           child: ElevatedButton(
-            style: ElevatedButton.styleFrom(minimumSize: const Size(double.infinity, 50)),
-            onPressed: isLoading ? null : () {
-              context.read<PermissionsCubit>().updatePermissions(
-                workspaceId: workspaceId,
-                userId: userId,
-              );
-            },
-            child: isLoading ? const CircularProgressIndicator() : const Text("Update Permissions"),
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(double.infinity, 50),
+            ),
+            onPressed: isLoading
+                ? null
+                : () {
+                    context.read<PermissionsCubit>().updatePermissions(
+                      workspaceId: workspaceId,
+                      userId: userId,
+                    );
+                  },
+            child: isLoading
+                ? const CircularProgressIndicator()
+                : const Text("Update Permissions"),
           ),
         );
       },

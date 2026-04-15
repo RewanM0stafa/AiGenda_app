@@ -15,7 +15,7 @@ class OnboardingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity, // خليناه ياخد العرض كامل
+      width: double.infinity,
       height: 56,
       child: ElevatedButton(
         onPressed: onPressed,

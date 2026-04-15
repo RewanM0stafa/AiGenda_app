@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz.dart';
 
 import '../../data/models/login/login_request_model.dart';
@@ -14,16 +13,16 @@ abstract class AuthRepository {
   Future<Either<String, LoginResponse>> login(LoginRequest request);
   Future<Either<String, void>> register(RegisterRequest request);
   Future<Either<String, void>> confirmEmail(ConfirmEmailRequest request);
-  Future<Either<String, void>> resendConfirmEmail(ResendConfirmEmailRequest request);
+  Future<Either<String, void>> resendConfirmEmail(
+    ResendConfirmEmailRequest request,
+  );
   Future<Either<String, void>> forgetPassword(ForgetPasswordRequest request);
   Future<Either<String, void>> resetPassword(ResetPasswordRequest request);
-  Future<Either<String, LoginResponse>> refreshToken(RefreshTokenRequest request);
+  Future<Either<String, LoginResponse>> refreshToken(
+    RefreshTokenRequest request,
+  );
   Future<Either<String, void>> revokeToken(RefreshTokenRequest request);
 }
-
-
-
-
 
 /*
 abstract class AuthRepository {

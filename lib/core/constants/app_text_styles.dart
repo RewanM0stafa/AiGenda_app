@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'app_colors.dart'; // تأكد من مسار الملف عندك
+import 'app_colors.dart';
 
 class AppTextStyles {
 
@@ -8,7 +8,7 @@ class AppTextStyles {
   static final TextStyle splashTitle = GoogleFonts.outfit(
     fontSize: 46,
     fontWeight: FontWeight.w800,
-    color: Colors.white, // أو AppColors.white لو متوفرة
+    color: AppColors.white,
     letterSpacing: 7,
     height: 1,
   );
@@ -16,7 +16,7 @@ class AppTextStyles {
   static final TextStyle taglineAr = GoogleFonts.cairo(
     fontSize: 17,
     fontWeight: FontWeight.w600,
-    color: AppColors.primary, // ربطناها بألوان التطبيق بتاعتك
+    color: AppColors.primary,
     height: 1.5,
   );
 
@@ -58,7 +58,7 @@ class AppTextStyles {
   static final TextStyle authTitle = GoogleFonts.outfit(
     fontSize: 32,
     fontWeight: FontWeight.w700,
-    color: AppColors.textDark, // تأكد إن اللون ده موجود في AppColors
+    color: AppColors.textDark,
     letterSpacing: 0.3,
     height: 1.2,
   );
@@ -73,7 +73,7 @@ class AppTextStyles {
   static final TextStyle authInstruction = GoogleFonts.outfit(
     fontSize: 13,
     fontWeight: FontWeight.w400,
-    color: AppColors.instructionPink, // تأكد إن اللون ده موجود في AppColors
+    color: AppColors.instructionPink,
     height: 1.5,
   );
 
@@ -87,7 +87,7 @@ class AppTextStyles {
   static final TextStyle fieldLabel = GoogleFonts.outfit(
     fontSize: 13,
     fontWeight: FontWeight.w500,
-    color: AppColors.textHint, // تأكد إن اللون ده موجود في AppColors
+    color: AppColors.textHint,
   );
 
   // ── Headlines ──
@@ -118,7 +118,7 @@ class AppTextStyles {
     height: 1.5,
   );
 
-  static final TextStyle bodyMedium = GoogleFonts.outfit( // ضفناها عشان كانت مستخدمة في زرار تسجيل الدخول في الـ Splash
+  static final TextStyle bodyMedium = GoogleFonts.outfit(
     fontSize: 13.5,
     fontWeight: FontWeight.w400,
     color: AppColors.textSecondary,
@@ -135,7 +135,7 @@ class AppTextStyles {
   static final TextStyle buttonText = GoogleFonts.outfit(
     fontSize: 16,
     fontWeight: FontWeight.w600,
-    color: AppColors.white, // تأكد إن اللون ده موجود في AppColors
+    color: AppColors.white,
     letterSpacing: 0.3,
   );
 

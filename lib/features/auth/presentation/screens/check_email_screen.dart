@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import '../../../../core/constants/app_icons.dart';
+import '../../../../core/utils/navigation_helper.dart';
 import '../../logic/auth_cubit/auth_cubit.dart';
 import '../../logic/auth_cubit/auth_state.dart';
 import '../../../../../../config/routes/route_names.dart';
@@ -28,7 +30,7 @@ class CheckEmailScreen extends StatelessWidget {
       isLoadingCondition: (state) => state is ForgetPasswordLoading,
       listener: (context, state) {
         if (state is ForgetPasswordSuccess) {
-          context.push(RouteNames.enterCode, extra: {'email': state.email});
+          pushTo(context,RouteNames.enterCode, extra: {'email': state.email});
         }
       },
       child: Form(
@@ -39,9 +41,9 @@ class CheckEmailScreen extends StatelessWidget {
               label: 'Email Address',
               hint: 'email@example.com',
               controller: _emailCtrl,
-              prefixIcon: Icons.email_outlined,
+              prefixIcon: AppIcons.email,
               enabled: !isLoading,
-              validator: AuthValidators.validateEmail, // استخدمنا الـ Constant validator
+              validator: AuthValidators.validateEmail,
             ),
             const SizedBox(height: 32),
             AuthGradientButton(
@@ -54,12 +56,11 @@ class CheckEmailScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: 24),
-            // الرجوع للخلف باستخدام الـ Helpers
             AuthFooter(
               leadingText: "Remember your password?",
               actionText: "Back to Sign In",
               isLoading: isLoading,
-              onActionTap: () => context.pop(),
+              onActionTap: () => pop(context),
             ),
           ],
         ),

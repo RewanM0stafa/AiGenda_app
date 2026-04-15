@@ -1,4 +1,3 @@
-
 import '../../data/models/profile_model.dart';
 
 abstract class ProfileState {}
@@ -37,6 +36,7 @@ class UpdateProfileFailure extends ProfileState {
 
 // Change Password
 class ChangePasswordLoading extends ProfileState {}
+
 class ChangePasswordSuccess extends ProfileState {}
 
 class ChangePasswordFailure extends ProfileState {
@@ -46,6 +46,7 @@ class ChangePasswordFailure extends ProfileState {
 
 // Change Email
 class ChangeEmailLoading extends ProfileState {}
+
 class ChangeEmailSuccess extends ProfileState {}
 
 class ChangeEmailFailure extends ProfileState {
@@ -55,6 +56,7 @@ class ChangeEmailFailure extends ProfileState {
 
 // Confirm Change Email
 class ConfirmChangeEmailLoading extends ProfileState {}
+
 class ConfirmChangeEmailSuccess extends ProfileState {}
 
 class ConfirmChangeEmailFailure extends ProfileState {
@@ -74,10 +76,3 @@ class UploadAvatarFailure extends ProfileState {
   final String errMessage;
   UploadAvatarFailure({required this.errMessage});
 }
-
-
-
-
-
-
-

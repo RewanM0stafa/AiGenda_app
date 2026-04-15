@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import '../constants/app_colors.dart';
 
@@ -23,12 +22,7 @@ class GradientText extends StatelessWidget {
       shaderCallback: (bounds) => LinearGradient(
         colors: colors ?? [AppColors.gradientBlue, AppColors.gradientPurple],
       ).createShader(bounds),
-      child: Text(
-        text,
-        style: style,
-        textAlign: textAlign,
-      ),
+      child: Text(text, style: style, textAlign: textAlign),
     );
   }
 }
- 

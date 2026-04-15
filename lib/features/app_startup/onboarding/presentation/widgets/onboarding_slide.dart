@@ -11,7 +11,8 @@ class OnboardingSlide extends StatefulWidget {
   State<OnboardingSlide> createState() => _OnboardingSlideState();
 }
 
-class _OnboardingSlideState extends State<OnboardingSlide> with SingleTickerProviderStateMixin {
+class _OnboardingSlideState extends State<OnboardingSlide>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -24,13 +25,15 @@ class _OnboardingSlideState extends State<OnboardingSlide> with SingleTickerProv
       duration: const Duration(milliseconds: 800),
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
-    _slideAnimation = Tween<Offset>(begin: const Offset(0, 0.2), end: Offset.zero).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
-    );
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 0.2),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
 
     _controller.forward();
   }
@@ -48,7 +51,6 @@ class _OnboardingSlideState extends State<OnboardingSlide> with SingleTickerProv
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // أنيميشن للصورة
           FadeTransition(
             opacity: _fadeAnimation,
             child: ScaleTransition(
@@ -62,7 +64,6 @@ class _OnboardingSlideState extends State<OnboardingSlide> with SingleTickerProv
           ),
           const SizedBox(height: 48),
 
-          // أنيميشن للنصوص
           SlideTransition(
             position: _slideAnimation,
             child: FadeTransition(

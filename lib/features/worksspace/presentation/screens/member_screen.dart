@@ -21,12 +21,12 @@ class MembersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => getIt<MembersCubit>()..getMembers(workspaceId),
-      child: Builder( // 👈 ضفنا Builder هنا
-        builder: (context) { // الـ context ده دلوقتي يقدر يشوف الـ MembersCubit
+      child: Builder(
+        // 👈 ضفنا Builder هنا
+        builder: (context) {
+          // الـ context ده دلوقتي يقدر يشوف الـ MembersCubit
           return Scaffold(
-            appBar: AppBar(
-              title: Text(workspaceName),
-            ),
+            appBar: AppBar(title: Text(workspaceName)),
             body: _MembersBody(workspaceId: workspaceId),
             floatingActionButton: FloatingActionButton(
               onPressed: () => _showAddMemberDialog(context, workspaceId),
@@ -38,7 +38,6 @@ class MembersScreen extends StatelessWidget {
     );
   }
 }
-
 
 class _MembersBody extends StatelessWidget {
   final int workspaceId;
@@ -73,17 +72,18 @@ class _MembersBody extends StatelessWidget {
                 trailing: member.isOwner
                     ? const Icon(Icons.star, color: Colors.amber)
                     : IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () {
-                    context.push(
-                      RouteNames.permissions,
-                      extra: {
-                        'workspaceId': workspaceId,
-                        'userId': member.userId,
-                        'permissions': member.permissions,
-                      },
-                    );                  },
-                ),
+                        icon: const Icon(Icons.settings),
+                        onPressed: () {
+                          context.push(
+                            RouteNames.permissions,
+                            extra: {
+                              'workspaceId': workspaceId,
+                              'userId': member.userId,
+                              'permissions': member.permissions,
+                            },
+                          );
+                        },
+                      ),
               );
             },
           );
@@ -94,6 +94,7 @@ class _MembersBody extends StatelessWidget {
     );
   }
 }
+
 void _showAddMemberDialog(BuildContext parentContext, int workspaceId) {
   final emailController = TextEditingController();
 
@@ -118,10 +119,7 @@ void _showAddMemberDialog(BuildContext parentContext, int workspaceId) {
             ),
             ElevatedButton(
               onPressed: () {
-                membersCubit.addMember(
-                  workspaceId,
-                  emailController.text,
-                );
+                membersCubit.addMember(workspaceId, emailController.text);
 
                 Navigator.pop(dialogContext);
               },

@@ -7,11 +7,14 @@ import '../../data/models/update_profile_request.dart';
 
 abstract class ProfileRepository {
   Future<Either<String, ProfileModel>> getProfile();
-  Future<Either<String, ProfileModel>> updateProfile(UpdateProfileRequest request);
+  Future<Either<String, ProfileModel>> updateProfile(
+    UpdateProfileRequest request,
+  );
   Future<Either<String, void>> changePassword(ChangePasswordRequest request);
   Future<Either<String, void>> changeEmail(ChangeEmailRequest request);
-  Future<Either<String, void>> confirmChangeEmail(ConfirmChangeEmailRequest request);
+  Future<Either<String, void>> confirmChangeEmail(
+    ConfirmChangeEmailRequest request,
+  );
   Future<Either<String, String>> uploadAvatar(String filePath);
   Future<Either<String, void>> deleteAvatar();
 }
- 

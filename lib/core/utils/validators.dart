@@ -1,21 +1,17 @@
 class AppValidators {
-
-  static String? requiredField(String? value,
-      {String fieldName = 'This field'}) {
-    bool isRequired = (value == null || value
-        .trim()
-        .isEmpty);
+  static String? requiredField(
+    String? value, {
+    String fieldName = 'This field',
+  }) {
+    bool isRequired = (value == null || value.trim().isEmpty);
     if (isRequired) {
       return '$fieldName is required.';
     }
     return null;
   }
 
-
   static String? validateUsername(String? value) {
-    bool isRequired = (value == null || value
-        .trim()
-        .isEmpty);
+    bool isRequired = (value == null || value.trim().isEmpty);
     if (isRequired) {
       return 'Please enter your username.';
     }

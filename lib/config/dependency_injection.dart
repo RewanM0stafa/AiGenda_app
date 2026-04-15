@@ -23,68 +23,53 @@ Future<void> setupDependencyInjection() async {
 
   getIt.registerLazySingleton<Dio>(() => Dio());
 
-  getIt.registerLazySingleton<DioClient>(
-        () => DioClient(getIt<Dio>()),
-  );
+  getIt.registerLazySingleton<DioClient>(() => DioClient(getIt<Dio>()));
 
   getIt.registerLazySingleton<ApiService>(
-        () => ApiService(getIt<DioClient>().dio),
+    () => ApiService(getIt<DioClient>().dio),
   );
 
   getIt.registerLazySingleton<SecureStorageService>(
-        () => SecureStorageService(),
+    () => SecureStorageService(),
   );
 
   //  Auth
 
   getIt.registerLazySingleton<AuthRepository>(
-        () => AuthRepositoryImpl(
+    () => AuthRepositoryImpl(
       apiService: getIt<ApiService>(),
       storage: getIt<SecureStorageService>(),
     ),
   );
 
   getIt.registerFactory<AuthCubit>(
-        () => AuthCubit(
-      getIt<AuthRepository>(),
-      getIt<SecureStorageService>(),
-    ),
+    () => AuthCubit(getIt<AuthRepository>(), getIt<SecureStorageService>()),
   );
 
   //  Profile
 
   getIt.registerLazySingleton<ProfileRepository>(
-        () => ProfileRepositoryImpl(
-      apiService: getIt<ApiService>(),
-    ),
+    () => ProfileRepositoryImpl(apiService: getIt<ApiService>()),
   );
-
 
   getIt.registerFactory<ProfileCubit>(
-        () => ProfileCubit(
-      getIt<ProfileRepository>(),
-      getIt<SecureStorageService>(),
-    ),
+    () =>
+        ProfileCubit(getIt<ProfileRepository>(), getIt<SecureStorageService>()),
   );
+
   //  Workspaces
 
   getIt.registerLazySingleton<WorkspaceRemoteDataSource>(
-        () => WorkspaceRemoteDataSource(getIt<Dio>()),
+    () => WorkspaceRemoteDataSource(getIt<Dio>()),
   );
 
   getIt.registerLazySingleton<WorkspaceRepository>(
-        () => WorkspaceRepositoryImpl(getIt()),
+    () => WorkspaceRepositoryImpl(getIt()),
   );
 
-  getIt.registerFactory<WorkspaceCubit>(
-        () => WorkspaceCubit(getIt()),
-  );
+  getIt.registerFactory<WorkspaceCubit>(() => WorkspaceCubit(getIt()));
 
-  getIt.registerFactory<MembersCubit>(
-        () => MembersCubit(getIt()),
-  );
+  getIt.registerFactory<MembersCubit>(() => MembersCubit(getIt()));
 
-  getIt.registerFactory<PermissionsCubit>(
-        () => PermissionsCubit(getIt()),
-  );
+  getIt.registerFactory<PermissionsCubit>(() => PermissionsCubit(getIt()));
 }

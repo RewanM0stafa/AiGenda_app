@@ -40,13 +40,10 @@ class WorkspaceRepositoryImpl implements WorkspaceRepository {
 
   @override
   Future<void> updatePermissions(
-      int workspaceId,
-      String userId,
-      List<String> permissions) {
-    return remote.updatePermissions(
-      workspaceId,
-      userId,
-      permissions,
-    );
+    int workspaceId,
+    String userId,
+    List<String> permissions,
+  ) {
+    return remote.updatePermissions(workspaceId, userId, permissions);
   }
 }

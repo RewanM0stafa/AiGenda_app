@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import '../../../../core/network/api_endpoints.dart';
@@ -48,9 +47,14 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<Either<String, ProfileModel>> updateProfile(UpdateProfileRequest request) async {
+  Future<Either<String, ProfileModel>> updateProfile(
+    UpdateProfileRequest request,
+  ) async {
     try {
-      final response = await apiService.put(ApiEndpoints.updateMe, data: request.toJson());
+      final response = await apiService.put(
+        ApiEndpoints.updateMe,
+        data: request.toJson(),
+      );
       return Right(ProfileModel.fromJson(response as Map<String, dynamic>));
     } catch (e) {
       return Left(_handleError(e));
@@ -58,7 +62,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<Either<String, void>> changePassword(ChangePasswordRequest request) async {
+  Future<Either<String, void>> changePassword(
+    ChangePasswordRequest request,
+  ) async {
     try {
       await apiService.put(ApiEndpoints.changePassword, data: request.toJson());
       return const Right(null);
@@ -78,9 +84,14 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<Either<String, void>> confirmChangeEmail(ConfirmChangeEmailRequest request) async {
+  Future<Either<String, void>> confirmChangeEmail(
+    ConfirmChangeEmailRequest request,
+  ) async {
     try {
-      await apiService.put(ApiEndpoints.confirmChangeEmail, data: request.toJson());
+      await apiService.put(
+        ApiEndpoints.confirmChangeEmail,
+        data: request.toJson(),
+      );
       return const Right(null);
     } catch (e) {
       return Left(_handleError(e));
@@ -94,7 +105,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
         'File': await MultipartFile.fromFile(filePath),
       });
 
-      final response = await apiService.post(ApiEndpoints.uploadAvatar, data: formData);
+      final response = await apiService.post(
+        ApiEndpoints.uploadAvatar,
+        data: formData,
+      );
 
       if (response is Map<String, dynamic>) {
         final relativePath = response['avatarUrl'] ?? '';
@@ -120,4 +134,3 @@ class ProfileRepositoryImpl implements ProfileRepository {
     }
   }
 }
-

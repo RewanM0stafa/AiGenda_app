@@ -1,10 +1,10 @@
-
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../../../core/constants/app_values.dart';
+import '../../../../core/constants/app_icons.dart';
 import '../../data/models/profile_model.dart';
 import 'profile_avatar.dart';
 
@@ -24,7 +24,8 @@ class ProfileHeaderCard extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(
-              horizontal: AppValues.horizontalPadding),
+            horizontal: AppValues.horizontalPadding,
+          ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(AppValues.radiusLg),
             child: BackdropFilter(
@@ -58,7 +59,7 @@ class ProfileHeaderCard extends StatelessWidget {
           ),
         ),
 
-        // ── Edit Button ──
+        //  Edit Button
         Transform.translate(
           offset: const Offset(0, 20),
           child: GestureDetector(
@@ -77,8 +78,11 @@ class ProfileHeaderCard extends StatelessWidget {
                   ),
                 ],
               ),
-              child:
-              const Icon(Icons.edit_rounded, color: AppColors.white, size: 20),
+              child: const Icon(
+                AppIcons.edit,
+                color: AppColors.white,
+                size: 20,
+              ),
             ),
           ),
         ),

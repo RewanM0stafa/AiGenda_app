@@ -1,4 +1,3 @@
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/storage/secure_storage_service.dart';
 import '../../data/models/change_email_request.dart';
@@ -11,7 +10,7 @@ import 'profile_state.dart';
 
 class ProfileCubit extends Cubit<ProfileState> {
   final ProfileRepository profileRepository;
-  final SecureStorageService storage; // 1. ضيفي ده
+  final SecureStorageService storage;
 
   ProfileCubit(this.profileRepository, this.storage) : super(ProfileInitial());
   ProfileModel? get currentProfile {
@@ -28,8 +27,8 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(ProfileLoading());
     final result = await profileRepository.getProfile();
     result.fold(
-          (failure) => emit(ProfileError(errMessage: failure)),
-          (profile) => emit(ProfileLoaded(profile: profile)),
+      (failure) => emit(ProfileError(errMessage: failure)),
+      (profile) => emit(ProfileLoaded(profile: profile)),
     );
   }
 
@@ -37,15 +36,15 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(ProfileLoading());
     final result = await profileRepository.getProfile();
     result.fold(
-          (failure) => emit(ProfileError(errMessage: failure)),
-          (profile) => emit(ProfileLoaded(profile: profile)),
+      (failure) => emit(ProfileError(errMessage: failure)),
+      (profile) => emit(ProfileLoaded(profile: profile)),
     );
   }
 
   Future<void> updateProfile({
     required String firstName,
     required String secondName,
-    required String dateOfBirth, // yyyy-MM-dd — required
+    required String dateOfBirth,
     String? jobTitle,
   }) async {
     final current = currentProfile;
@@ -61,8 +60,9 @@ class ProfileCubit extends Cubit<ProfileState> {
       ),
     );
     result.fold(
-          (failure) => emit(UpdateProfileFailure(profile: current, errMessage: failure)),
-          (profile) => emit(UpdateProfileSuccess(profile: profile)),
+      (failure) =>
+          emit(UpdateProfileFailure(profile: current, errMessage: failure)),
+      (profile) => emit(UpdateProfileSuccess(profile: profile)),
     );
   }
 
@@ -72,32 +72,36 @@ class ProfileCubit extends Cubit<ProfileState> {
   }) async {
     emit(ChangePasswordLoading());
     final result = await profileRepository.changePassword(
-      ChangePasswordRequest(currentPassword: currentPassword, newPassword: newPassword),
+      ChangePasswordRequest(
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+      ),
     );
     result.fold(
-          (failure) => emit(ChangePasswordFailure(errMessage: failure)),
-          (_) => emit(ChangePasswordSuccess()),
+      (failure) => emit(ChangePasswordFailure(errMessage: failure)),
+      (_) => emit(ChangePasswordSuccess()),
     );
   }
 
   Future<void> changeEmail({required String newEmail}) async {
     emit(ChangeEmailLoading());
-    final result = await profileRepository.changeEmail(ChangeEmailRequest(newEmail: newEmail));
+    final result = await profileRepository.changeEmail(
+      ChangeEmailRequest(newEmail: newEmail),
+    );
     result.fold(
-          (failure) => emit(ChangeEmailFailure(errMessage: failure)),
-          (_) => emit(ChangeEmailSuccess()),
+      (failure) => emit(ChangeEmailFailure(errMessage: failure)),
+      (_) => emit(ChangeEmailSuccess()),
     );
   }
 
   Future<void> confirmChangeEmail({
-    String? id, // 2. خليه اختياري هنا
+    String? id,
     required String newEmail,
     required String code,
   }) async {
     emit(ConfirmChangeEmailLoading());
 
-    // 3. لو الـ ID مجاش من الشاشة، هاته من الخزنة
-    final finalId = id ?? await storage.getUserId();
+    final finalId = id?.isNotEmpty == true ? id! : await storage.getUserId();
 
     if (finalId == null || finalId.isEmpty) {
       emit(ConfirmChangeEmailFailure(errMessage: "User ID not found."));
@@ -109,34 +113,23 @@ class ProfileCubit extends Cubit<ProfileState> {
     );
 
     result.fold(
-          (failure) => emit(ConfirmChangeEmailFailure(errMessage: failure)),
-          (_) => emit(ConfirmChangeEmailSuccess()),
-    );
-    result.fold(
-          (failure) => emit(ConfirmChangeEmailFailure(errMessage: failure)),
-          (_) {
-        emit(ConfirmChangeEmailSuccess());
-        // ✅ السطر ده هو اللي هيخلي الداتا الجديدة تظهر في كل الشاشات
-        refreshProfile();
-      },
+      (failure) => emit(ConfirmChangeEmailFailure(errMessage: failure)),
+      (_) => emit(ConfirmChangeEmailSuccess()),
     );
   }
 
-  // ── Avatar — بعد الرفع نحدث الـ profile مباشرة في الـ state ──
   Future<void> uploadAvatar(String filePath) async {
     final current = currentProfile;
     if (current == null) return;
 
     emit(UploadAvatarLoading());
     final result = await profileRepository.uploadAvatar(filePath);
-    result.fold(
-          (failure) => emit(UploadAvatarFailure(errMessage: failure)),
-          (url) {
-        // نحدث الـ profile بالـ avatar الجديد عشان الـ UI يتحدث تلقائياً
-        final updatedProfile = current.copyWith(profileImage: url);
-        emit(ProfileLoaded(profile: updatedProfile));
-      },
-    );
+    result.fold((failure) => emit(UploadAvatarFailure(errMessage: failure)), (
+      url,
+    ) {
+      final updatedProfile = current.copyWith(profileImage: url);
+      emit(ProfileLoaded(profile: updatedProfile));
+    });
   }
 
   Future<void> deleteAvatar() async {
@@ -144,12 +137,11 @@ class ProfileCubit extends Cubit<ProfileState> {
     if (current == null) return;
 
     final result = await profileRepository.deleteAvatar();
-    result.fold(
-          (failure) => emit(UploadAvatarFailure(errMessage: failure)),
-          (_) {
-        final updatedProfile = current.copyWith(profileImage: null);
-        emit(ProfileLoaded(profile: updatedProfile));
-      },
-    );
+    result.fold((failure) => emit(UploadAvatarFailure(errMessage: failure)), (
+      _,
+    ) {
+      final updatedProfile = current.copyWith(profileImage: null);
+      emit(ProfileLoaded(profile: updatedProfile));
+    });
   }
 }

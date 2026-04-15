@@ -21,8 +21,7 @@ class PermissionsLoaded extends PermissionsState {
     bool? isLoading,
   }) {
     return PermissionsLoaded(
-      selectedPermissions:
-      selectedPermissions ?? this.selectedPermissions,
+      selectedPermissions: selectedPermissions ?? this.selectedPermissions,
       role: role ?? this.role,
       isLoading: isLoading ?? this.isLoading,
     );

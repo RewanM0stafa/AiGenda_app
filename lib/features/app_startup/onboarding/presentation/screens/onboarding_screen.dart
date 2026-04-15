@@ -6,7 +6,6 @@ import '../../../../../core/constants/app_strings.dart';
 import '../../../../../core/constants/app_text_styles.dart';
 import '../../../../../config/routes/route_names.dart';
 import '../widgets/onboarding_page_indicator.dart';
-import '../widgets/onboarding_page_view.dart';
 import '../widgets/onboarding_button.dart';
 import '../../data/models/onboarding_data.dart';
 
@@ -20,7 +19,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
-  final _pages = OnboardingData.list; // استخدمنا الداتا من الـ Model بتاعك
+  final _pages = OnboardingData.list;
 
   @override
   Widget build(BuildContext context) {

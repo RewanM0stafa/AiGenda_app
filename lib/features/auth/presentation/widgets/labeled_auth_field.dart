@@ -42,7 +42,7 @@ class LabeledAuthField extends StatelessWidget {
           keyboardType: keyboardType,
           validator: validator,
         ),
-        const SizedBox(height: 14), // مسافة ثابتة مريحة للعين بين الـ Fields
+        const SizedBox(height: 14),
       ],
     );
   }

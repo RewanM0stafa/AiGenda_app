@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,11 +8,7 @@ class ProfileAppBar extends StatelessWidget {
   final String title;
   final List<Widget>? actions;
 
-  const ProfileAppBar({
-    super.key,
-    required this.title,
-    this.actions,
-  });
+  const ProfileAppBar({super.key, required this.title, this.actions});
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +31,11 @@ class ProfileAppBar extends StatelessWidget {
               ),
             ],
           ),
-          child: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.primary, size: 18),
+          child: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.primary,
+            size: 18,
+          ),
         ),
       ),
       title: Text(

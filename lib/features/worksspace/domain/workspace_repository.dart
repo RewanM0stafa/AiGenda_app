@@ -16,8 +16,8 @@ abstract class WorkspaceRepository {
   Future<void> addMember(int workspaceId, String email);
 
   Future<void> updatePermissions(
-      int workspaceId,
-      String userId,
-      List<String> permissions,
-      );
+    int workspaceId,
+    String userId,
+    List<String> permissions,
+  );
 }

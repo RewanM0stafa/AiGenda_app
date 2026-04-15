@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_icons.dart';
 
 class ProfileAvatar extends StatelessWidget {
   final String? imageUrl;
@@ -42,15 +42,15 @@ class ProfileAvatar extends StatelessWidget {
             child: imageUrl != null
                 ? Image.network(imageUrl!, fit: BoxFit.cover)
                 : Center(
-              child: Text(
-                initials ?? '?',
-                style: GoogleFonts.outfit(
-                  fontSize: size * 0.38,
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.white,
-                ),
-              ),
-            ),
+                    child: Text(
+                      initials ?? '?',
+                      style: GoogleFonts.outfit(
+                        fontSize: size * 0.38,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.white,
+                      ),
+                    ),
+                  ),
           ),
         ),
         if (showCameraIcon)
@@ -68,7 +68,7 @@ class ProfileAvatar extends StatelessWidget {
                   border: Border.all(color: AppColors.white, width: 2),
                 ),
                 child: Icon(
-                  Icons.camera_alt_rounded,
+                  AppIcons.camera,
                   color: AppColors.white,
                   size: size * 0.16,
                 ),

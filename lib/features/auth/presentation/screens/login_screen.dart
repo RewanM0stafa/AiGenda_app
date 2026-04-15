@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../config/routes/route_names.dart';
 import '../../../../core/constants/app_icons.dart';
 import '../../../../core/constants/app_strings.dart';
+import '../../../../core/utils/navigation_helper.dart';
 import '../../logic/auth_cubit/auth_cubit.dart';
 import '../../logic/auth_cubit/auth_state.dart';
 import '../widgets/auth_consumer.dart';
@@ -65,7 +66,7 @@ class _LoginScreenState extends State<LoginScreen> {
               label: 'Password',
               hint: AppStrings.passwordHint,
               controller: _passwordCtrl,
-              prefixIcon: AppIcons.lock,
+              prefixIcon: AppIcons.key,
               obscure: _obscurePassword,
               enabled: !isLoading,
               suffixIcon: AuthEyeToggle(
@@ -117,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
               isLoading: isLoading,
               onActionTap:
                   widget.onSwitchToSignUp ??
-                  () => context.push(RouteNames.register),
+                  () => pushTo(context, RouteNames.register),
             ),
           ],
         ),

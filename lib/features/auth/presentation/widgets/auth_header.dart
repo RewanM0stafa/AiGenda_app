@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_text_styles.dart';
@@ -31,22 +30,22 @@ class AuthHeader extends StatelessWidget {
         if (title.isNotEmpty) ...[
           titleIsGradient
               ? ShaderMask(
-            blendMode: BlendMode.srcIn,
-            shaderCallback: (bounds) =>
-                AppColors.primaryGradient.createShader(bounds),
-            child: Text(
-              title,
-              style: AppTextStyles.authTitle.copyWith(
-                color: AppColors.white,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          )
+                  blendMode: BlendMode.srcIn,
+                  shaderCallback: (bounds) =>
+                      AppColors.primaryGradient.createShader(bounds),
+                  child: Text(
+                    title,
+                    style: AppTextStyles.authTitle.copyWith(
+                      color: AppColors.white,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                )
               : Text(
-            title,
-            style: AppTextStyles.authTitle,
-            textAlign: TextAlign.center,
-          ),
+                  title,
+                  style: AppTextStyles.authTitle,
+                  textAlign: TextAlign.center,
+                ),
           if (subtitle != null && subtitle!.isNotEmpty) ...[
             const SizedBox(height: 6),
             Text(
@@ -64,10 +63,7 @@ class AuthHeader extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        AppLogo(
-          width: AppValues.logoHeight,
-          height: AppValues.logoHeight,
-        ),
+        AppLogo(width: AppValues.logoHeight, height: AppValues.logoHeight),
         if (showAppNameBelowLogo) ...[
           const SizedBox(height: 12),
           ShaderMask(
@@ -84,4 +80,3 @@ class AuthHeader extends StatelessWidget {
     );
   }
 }
- 

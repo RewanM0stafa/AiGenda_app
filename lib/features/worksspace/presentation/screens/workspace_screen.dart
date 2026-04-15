@@ -1,4 +1,3 @@
-
 import 'package:ajenda_app/features/profile/presentation/profile_widgets/shared_profile_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,18 +16,16 @@ class WorkspacesScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => getIt<WorkspaceCubit>()..getWorkspaces(),
       child: Builder(
-          builder: (newContext) {
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text("Workspaces"),
-              ),
-              body: const _WorkspacesBody(),
-              floatingActionButton: FloatingActionButton(
-                onPressed: () => _showCreateWorkspaceDialog(newContext),
-                child: const Icon(Icons.add),
-              ),
-            );
-          }
+        builder: (newContext) {
+          return Scaffold(
+            appBar: AppBar(title: const Text("Workspaces")),
+            body: const _WorkspacesBody(),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () => _showCreateWorkspaceDialog(newContext),
+              child: const Icon(Icons.add),
+            ),
+          );
+        },
       ),
     );
   }
@@ -84,6 +81,7 @@ class _WorkspacesBody extends StatelessWidget {
     );
   }
 }
+
 void _showCreateWorkspaceDialog(BuildContext context) {
   final nameController = TextEditingController();
   final descController = TextEditingController();
@@ -128,11 +126,12 @@ void _showCreateWorkspaceDialog(BuildContext context) {
                 ),
                 ElevatedButton(
                   onPressed: () {
-
                     dialogContext.read<WorkspaceCubit>().createWorkspace(
                       name: nameController.text,
                       description: descController.text,
-                      iconCode: iconController.text.isNotEmpty ? iconController.text : "#0000",
+                      iconCode: iconController.text.isNotEmpty
+                          ? iconController.text
+                          : "#0000",
                       visibility: 1,
                     );
 
@@ -148,7 +147,3 @@ void _showCreateWorkspaceDialog(BuildContext context) {
     },
   );
 }
-
-
-
-

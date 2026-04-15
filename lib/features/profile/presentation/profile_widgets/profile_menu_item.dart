@@ -1,8 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../../../core/constants/app_colors.dart';
 import '../../../../../core/constants/app_text_styles.dart';
+import '../../../../core/constants/app_icons.dart';
 
 class ProfileMenuItem extends StatelessWidget {
   final IconData icon;
@@ -49,14 +49,18 @@ class ProfileMenuItem extends StatelessWidget {
       height: 42,
       decoration: BoxDecoration(
         gradient: isDestructive
-            ? LinearGradient(colors: [
-          AppColors.error.withOpacity(0.15),
-          AppColors.error.withOpacity(0.08),
-        ])
-            : LinearGradient(colors: [
-          AppColors.gradientBlue.withOpacity(0.15),
-          AppColors.gradientPurple.withOpacity(0.15),
-        ]),
+            ? LinearGradient(
+                colors: [
+                  AppColors.error.withOpacity(0.15),
+                  AppColors.error.withOpacity(0.08),
+                ],
+              )
+            : LinearGradient(
+                colors: [
+                  AppColors.gradientBlue.withOpacity(0.15),
+                  AppColors.gradientPurple.withOpacity(0.15),
+                ],
+              ),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Icon(
@@ -114,11 +118,13 @@ class ProfileMenuItem extends StatelessWidget {
           color: AppColors.error.withOpacity(0.1),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: const Icon(Icons.power_settings_new_rounded,
-            color: AppColors.error, size: 18),
+        child: const Icon(
+          AppIcons.powerSettings,
+          color: AppColors.error,
+          size: 18,
+        ),
       );
     }
-    return Icon(Icons.arrow_forward_ios_rounded,
-        size: 14, color: AppColors.textMuted);
+    return Icon(AppIcons.forward, size: 14, color: AppColors.textMuted);
   }
 }

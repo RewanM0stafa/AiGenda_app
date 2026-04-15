@@ -9,11 +9,7 @@ class ProfileSectionCard extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry? padding;
 
-  const ProfileSectionCard({
-    super.key,
-    required this.child,
-    this.padding,
-  });
+  const ProfileSectionCard({super.key, required this.child, this.padding});
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +18,7 @@ class ProfileSectionCard extends StatelessWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
-          padding:
-          padding ?? const EdgeInsets.all(AppValues.cardPadding),
+          padding: padding ?? const EdgeInsets.all(AppValues.cardPadding),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,

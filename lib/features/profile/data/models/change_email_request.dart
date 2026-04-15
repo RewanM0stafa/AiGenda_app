@@ -1,6 +1,3 @@
-
-
-
 import '../../../../core/network/api_keys.dart';
 
 class ChangeEmailRequest {
@@ -9,8 +6,6 @@ class ChangeEmailRequest {
   ChangeEmailRequest({required this.newEmail});
 
   Map<String, dynamic> toJson() {
-    return {
-      ApiKeys.newEmail: newEmail,
-    };
+    return {ApiKeys.newEmail: newEmail};
   }
 }

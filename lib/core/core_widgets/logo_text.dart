@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../constants/app_colors.dart';
@@ -24,7 +23,8 @@ class LogoText extends StatelessWidget {
   Widget build(BuildContext context) {
     final content = ShaderMask(
       blendMode: BlendMode.srcIn,
-      shaderCallback: (bounds) => AppColors.primaryGradient.createShader(bounds),
+      shaderCallback: (bounds) =>
+          AppColors.primaryGradient.createShader(bounds),
       child: Text(
         text,
         textAlign: textAlign,
