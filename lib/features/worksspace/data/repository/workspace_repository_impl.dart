@@ -1,3 +1,5 @@
+// data/repositories/workspace_repository_impl.dart
+
 import '../../domain/workspace_repository.dart';
 import '../data_source/workspace_remote_data_source.dart';
 import '../models/member_model.dart';
@@ -5,48 +7,45 @@ import '../models/workspace_model.dart';
 
 class WorkspaceRepositoryImpl implements WorkspaceRepository {
   final WorkspaceRemoteDataSource remote;
-
   WorkspaceRepositoryImpl(this.remote);
 
   @override
-  Future<List<WorkspaceModel>> getWorkspaces() {
-    return remote.getWorkspaces();
-  }
+  Future<List<WorkspaceModel>> getWorkspaces() => remote.getWorkspaces();
 
   @override
-  Future<void> createWorkspace({
+  Future<int?> createWorkspace({
     required String name,
     required String description,
     required String iconCode,
     required int visibility,
-  }) {
-    return remote.createWorkspace(
-      name: name,
-      description: description,
-      iconCode: iconCode,
-      visibility: visibility,
-    );
-  }
+  }) => remote.createWorkspace(
+        name: name, description: description,
+        iconCode: iconCode, visibility: visibility);
 
   @override
-  Future<List<MemberModel>> getMembers(int workspaceId) {
-    return remote.getMembers(workspaceId);
-  }
+  Future<void> editWorkspace({
+    required int workspaceId,
+    required String name,
+    required String description,
+    required String iconCode,
+    required int visibility,
+  }) => remote.editWorkspace(
+        workspaceId: workspaceId, name: name,
+        description: description, iconCode: iconCode, visibility: visibility);
 
   @override
-  Future<void> addMember(int workspaceId, String email) {
-    return remote.addMember(workspaceId, email);
-  }
+  Future<void> deleteWorkspace(int id) => remote.deleteWorkspace(id);
 
   @override
-  Future<void> updatePermissions(
-      int workspaceId,
-      String userId,
-      List<String> permissions) {
-    return remote.updatePermissions(
-      workspaceId,
-      userId,
-      permissions,
-    );
-  }
+  Future<void> leaveWorkspace(int id) => remote.leaveWorkspace(id);
+
+  @override
+  Future<List<MemberModel>> getMembers(int id) => remote.getMembers(id);
+
+  @override
+  Future<void> addMember(int id, String email) => remote.addMember(id, email);
+
+  @override
+  Future<void> updatePermissions(int id, String userId, List<String> p) =>
+      remote.updatePermissions(id, userId, p);
 }

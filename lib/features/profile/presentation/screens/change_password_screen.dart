@@ -3,9 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../../../core/constants/app_colors.dart';
 import '../../../auth/presentation/widgets/auth_helpers.dart';
-import '../../data/models/change_password_request.dart';
 import '../../logic/profile_cubit/profile_cubit.dart';
 import '../../logic/profile_cubit/profile_state.dart';
 /*

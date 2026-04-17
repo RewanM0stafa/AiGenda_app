@@ -16,6 +16,7 @@ import '../../features/profile/presentation/screens/edit_profile_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/worksspace/logic/permission_cubit/permission_cubit.dart';
 import '../../features/worksspace/presentation/screens/member_screen.dart';
+import '../../features/profile/presentation/screens/change_email_screen.dart';
 import '../../features/worksspace/presentation/screens/permission_screen.dart';
 import '../../features/worksspace/presentation/screens/workspace_screen.dart';
 import '../dependency_injection.dart';
@@ -126,6 +127,14 @@ final GoRouter appRouter = GoRouter(
         child: const ChangePasswordScreen(),
       ),
     ),
+
+    // GoRoute(
+    //   path: RouteNames.changeEmail,
+    //   builder: (context, state) => BlocProvider.value(
+    //     value: getIt<ProfileCubit>(),
+    //     child: const ChangeEmailScreen(),
+    //   ),
+    // ),
 
     //  Workspace route
 
