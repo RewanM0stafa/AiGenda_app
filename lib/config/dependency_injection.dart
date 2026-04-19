@@ -122,12 +122,12 @@ Future<void> setupDependencyInjection() async {
   getIt.registerFactory<SpaceCubit>(
         () => SpaceCubit(getIt<SpaceRepository>()),
   );
-/*
+
   getIt.registerFactory<DeletedSpaceCubit>(
         () => DeletedSpaceCubit(getIt<SpaceRepository>()),
   );
 
- */
+
 
   // ── Task ──────────────────────────────────────────────────────
 
