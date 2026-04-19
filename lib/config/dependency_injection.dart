@@ -16,6 +16,7 @@ import '../features/profile/domain/repositories/profile_repository.dart';
 import '../features/profile/logic/profile_cubit/profile_cubit.dart';
 
 // Workspace
+import '../features/space/logic/deleted_space_cubit/deleted_space_cubit.dart';
 import '../features/task/data/data_source/subtask_remote_data_source.dart';
 import '../features/task/data/data_source/task_remote_data_source.dart';
 import '../features/task/data/repository/subtask_repository_impl.dart';
