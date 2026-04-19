@@ -31,10 +31,13 @@ class ApiService {
       throw e;
     }
   }
-
-  Future<dynamic> delete(String path) async {
+  Future<dynamic> delete(String path, {Object? data, Map<String, dynamic>? queryParameters}) async {
     try {
-      final response = await _dio.delete(path);
+      final response = await _dio.delete(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+      );
       return response.data;
     } on DioException catch (e) {
       throw e;

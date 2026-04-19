@@ -84,6 +84,16 @@ class TemporarySelectionScreen extends StatelessWidget {
                 print('Navigate to Workspace');
               },
             ),
+            _SelectionCard(
+              title: 'Space',
+              subtitle: 'Manage your tasks and projects',
+              icon: Icons.work_history_outlined,
+              color: const Color(0xC16C63FF),
+              onTap: () {
+                context.push(RouteNames.spaces);
+                print('Navigate to Space');
+              },
+            ),
           ],
         ),
       ),

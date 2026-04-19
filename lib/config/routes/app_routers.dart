@@ -14,16 +14,14 @@ import '../../features/profile/logic/profile_cubit/profile_cubit.dart';
 import '../../features/profile/presentation/screens/change_password_screen.dart';
 import '../../features/profile/presentation/screens/edit_profile_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
-import '../../features/worksspace/logic/permission_cubit/permission_cubit.dart';
-import '../../features/worksspace/presentation/screens/member_screen.dart';
-import '../../features/worksspace/presentation/screens/permission_screen.dart';
-import '../../features/worksspace/presentation/screens/workspace_screen.dart';
+import '../../features/space/logic/space_cubit/space_cubit.dart';
+
 import '../dependency_injection.dart';
 import 'route_names.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: RouteNames.splash /*RouteNames.welcome*/ ,
+  initialLocation: RouteNames.splash /*RouteNames.welcome*/,
   routes: [
     GoRoute(
       path: RouteNames.splash,
@@ -44,7 +42,11 @@ final GoRouter appRouter = GoRouter(
       path: RouteNames.login,
       builder: (context, state) => BlocProvider(
         create: (context) => getIt<AuthCubit>(),
-        child: LoginScreen(onSwitchToSignUp: () {    context.go(RouteNames.register);  },),
+        child: LoginScreen(
+          onSwitchToSignUp: () {
+            context.go(RouteNames.register);
+          },
+        ),
       ),
     ),
 
@@ -53,11 +55,13 @@ final GoRouter appRouter = GoRouter(
       path: RouteNames.register,
       builder: (context, state) => BlocProvider(
         create: (context) => getIt<AuthCubit>(),
-        child:  RegisterScreen(onSwitchToSignIn: () {    context.go(RouteNames.login);  },),
+        child: RegisterScreen(
+          onSwitchToSignIn: () {
+            context.go(RouteNames.login);
+          },
+        ),
       ),
     ),
-
-
 
     GoRoute(
       path: RouteNames.confirmEmail,
@@ -78,7 +82,7 @@ final GoRouter appRouter = GoRouter(
       path: RouteNames.checkEmail,
       builder: (context, state) => BlocProvider(
         create: (context) => getIt<AuthCubit>(),
-        child:  CheckEmailScreen(),
+        child: CheckEmailScreen(),
       ),
     ),
 
@@ -96,9 +100,8 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: RouteNames.home,
       name: 'home',
-     // builder: (context, state) => const HomeScreen(),
+      // builder: (context, state) => const HomeScreen(),
       builder: (context, state) => const TemporarySelectionScreen(),
-
     ),
 
     //  Profile
@@ -113,7 +116,6 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: RouteNames.editProfile,
       builder: (context, state) => BlocProvider.value(
-        // نفس الـ instance عشان نحتفظ بالداتا
         value: getIt<ProfileCubit>(),
         child: const EditProfileScreen(),
       ),
@@ -127,8 +129,14 @@ final GoRouter appRouter = GoRouter(
       ),
     ),
 
-    //  Workspace route
+  ],
+);
 
+
+
+
+/*
+    //  Workspace route
     GoRoute(
       path: RouteNames.workspaces,
       builder: (context, state) => const WorkspacesScreen(),
@@ -154,8 +162,7 @@ final GoRouter appRouter = GoRouter(
         final extra = state.extra as Map<String, dynamic>;
 
         return BlocProvider(
-          create: (_) => getIt<PermissionsCubit>()
-            ..init(extra['permissions']),
+          create: (_) => getIt<PermissionsCubit>()..init(extra['permissions']),
           child: PermissionsScreen(
             workspaceId: extra['workspaceId'],
             userId: extra['userId'],
@@ -163,5 +170,18 @@ final GoRouter appRouter = GoRouter(
         );
       },
     ),
-  ],
-);
+
+    //  Space route
+    GoRoute(
+      path: RouteNames.spaces,
+      builder: (context, state) {
+        final extras = state.extra as Map<String, dynamic>;
+        final workspaceId = extras['workspaceId'] as int;
+
+        return BlocProvider(
+          create: (context) => getIt<SpaceCubit>(),
+          child: SpacesTestScreen(workspaceId: workspaceId),
+        );
+      },
+    ),
+    */
