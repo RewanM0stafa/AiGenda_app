@@ -11,8 +11,9 @@ class RolePermissionsMapper {
         return [
           AppPermissions.spacesAdd,
           AppPermissions.tasksAdd,
-          AppPermissions.tasksUpdate,
           AppPermissions.notesAdd,
+          AppPermissions.spacesUpdate,
+          AppPermissions.tasksUpdate,
           AppPermissions.notesUpdate,
         ];
 

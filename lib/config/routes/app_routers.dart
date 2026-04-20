@@ -1,4 +1,5 @@
 import 'package:ajenda_app/core/network/api_keys.dart';
+import 'package:ajenda_app/features/worksspace/presentation/screens/workspace_dashboard_screen.dart';
 import 'package:ajenda_app/main.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/app_startup/onboarding/presentation/screens/onboarding_screen.dart';
@@ -16,6 +17,7 @@ import '../../features/profile/presentation/screens/edit_profile_screen.dart';
 import '../../features/profile/presentation/screens/profile_screen.dart';
 import '../../features/worksspace/logic/permission_cubit/permission_cubit.dart';
 import '../../features/worksspace/presentation/screens/member_screen.dart';
+// import '../../features/profile/presentation/screens/change_email_screen.dart';
 import '../../features/worksspace/presentation/screens/permission_screen.dart';
 import '../../features/worksspace/presentation/screens/workspace_screen.dart';
 import '../dependency_injection.dart';
@@ -127,11 +129,35 @@ final GoRouter appRouter = GoRouter(
       ),
     ),
 
+    // GoRoute(
+    //   path: RouteNames.changeEmail,
+    //   builder: (context, state) => BlocProvider.value(
+    //     value: getIt<ProfileCubit>(),
+    //     child: const ChangeEmailScreen(),
+    //   ),
+    // ),
+
     //  Workspace route
 
     GoRoute(
       path: RouteNames.workspaces,
       builder: (context, state) => const WorkspacesScreen(),
+    ),
+    
+    GoRoute(
+      path: RouteNames.workspaceDashboard,
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic> ;
+
+        return WorkspaceDashboardScreen(
+          workspaceId: extra['workspaceId'] as int,
+          workspaceName: extra['workspaceName'] as String,
+          workspaceDescription: extra['workspaceDescription'] as String? ?? '',
+          numberOfMembers: extra['numberOfMembers'] as int? ?? 0,
+          numberOfTasks: extra['numberOfTasks'] as int? ?? 0,
+          isCurrentUserOwner: extra['isCurrentUserOwner'] as bool? ?? false,
+        );
+      },
     ),
 
     // Member route
@@ -141,8 +167,9 @@ final GoRouter appRouter = GoRouter(
         final extra = state.extra as Map<String, dynamic>;
 
         return MembersScreen(
-          workspaceId: extra['workspaceId'],
-          workspaceName: extra['workspaceName'],
+          workspaceId: extra['workspaceId'] as int,
+          workspaceName: extra['workspaceName'] as String,
+          isCurrentUserOwner: extra['isCurrentUserOwner'] ?? false,
         );
       },
     ),
@@ -152,13 +179,18 @@ final GoRouter appRouter = GoRouter(
       path: RouteNames.permissions,
       builder: (context, state) {
         final extra = state.extra as Map<String, dynamic>;
+        // final permissions = 
+        //     List<String>.from(extra['permissions'] as List? ?? []);
+        // final canUserModify = extra['canUserModify'] as bool? ?? false;
 
         return BlocProvider(
           create: (_) => getIt<PermissionsCubit>()
-            ..init(extra['permissions']),
+            ..init(
+              List<String>.from(extra['permissions']),
+              canUserModify: extra['canUserModify'] ?? false,),
           child: PermissionsScreen(
-            workspaceId: extra['workspaceId'],
-            userId: extra['userId'],
+            workspaceId: extra['workspaceId'] ,
+            userId: extra['userId'] ,
           ),
         );
       },

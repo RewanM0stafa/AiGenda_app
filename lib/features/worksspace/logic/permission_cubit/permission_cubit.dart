@@ -10,20 +10,26 @@ class PermissionsCubit extends Cubit<PermissionsState> {
 
   PermissionsCubit(this.repository) : super(PermissionsInitial());
 
-  void init(List<String> currentPermissions) {
-    final detectedRole = _detectRole(currentPermissions);
+  void init(List<String> currentPermissions, {bool canUserModify = false}) {
+    // print('PermissionsCubit.init: canUserModify = $canUserModify');
+    // final detectedRole = _detectRole(currentPermissions);
 
     emit(
       PermissionsLoaded(
         selectedPermissions: currentPermissions,
-        role: detectedRole,
+        role: _detectRole(currentPermissions),
+        canUserModify: canUserModify,
       ),
     );
   }
 
   void changeRole(WorkspaceRole role) {
-    final permissions = RolePermissionsMapper.map(role);
-    emit(PermissionsLoaded(selectedPermissions: permissions, role: role));
+    if(state is! PermissionsLoaded) return;
+    final current = state as PermissionsLoaded;
+    //final permissions = RolePermissionsMapper.map(role);
+    emit(current.copyWith(
+      selectedPermissions: RolePermissionsMapper.map(role), 
+      role: role));
   }
 
   void togglePermission(String permission) {
@@ -31,11 +37,9 @@ class PermissionsCubit extends Cubit<PermissionsState> {
     final current = state as PermissionsLoaded;
     final updated = List<String>.from(current.selectedPermissions);
 
-    if (updated.contains(permission)) {
-      updated.remove(permission);
-    } else {
-      updated.add(permission);
-    }
+     updated.contains(permission) 
+        ? updated.remove(permission) 
+        : updated.add(permission);
 
     emit(
       current.copyWith(
@@ -48,14 +52,20 @@ class PermissionsCubit extends Cubit<PermissionsState> {
   Future<void> updatePermissions({
     required int workspaceId,
     required String userId,
+    required bool canUserModify,
   }) async {
+  if (!canUserModify) {
+      emit(PermissionsError("You don't have permission to modify this user's permissions."));
+      return;
+    }
+
     if (state is! PermissionsLoaded) return;
     final current = state as PermissionsLoaded;
 
     try {
       emit(current.copyWith(isLoading: true));
 
-      final List<String> defaultPermissions = [
+      const defaultPermissions = [
         AppPermissions.workspacesRead,
         AppPermissions.spacesRead,
         AppPermissions.tasksRead,
@@ -71,9 +81,10 @@ class PermissionsCubit extends Cubit<PermissionsState> {
         userId,
         permissionsToSend,
       );
-
-      emit(current.copyWith(isLoading: false));
+      emit(PermissionsUpdateSuccess());
+      //emit(current.copyWith(isLoading: false));
     } catch (e) {
+      emit(current.copyWith(isLoading: false));
       emit(PermissionsError(e.toString()));
     }
   }
@@ -101,9 +112,11 @@ class PermissionsCubit extends Cubit<PermissionsState> {
 
     return WorkspaceRole.custom;
   }
+   bool _setEquals(Set<String> a, Set<String> b) =>
+      a.length == b.length && a.containsAll(b);
 
-  bool _setEquals(Set<String> a, Set<String> b) {
-    if (a.length != b.length) return false;
-    return a.containsAll(b);
-  }
+  // bool _setEquals(Set<String> a, Set<String> b) {
+  //   if (a.length != b.length) return false;
+  //   return a.containsAll(b);
+  // }
 }

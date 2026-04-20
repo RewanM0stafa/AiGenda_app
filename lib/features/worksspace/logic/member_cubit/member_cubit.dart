@@ -22,11 +22,14 @@ class MembersCubit extends Cubit<MembersState> {
   }
 
   //  ADD MEMBER
-  Future<void> addMember(int workspaceId, String email) async {
+  Future<void> addMember(
+    int workspaceId, 
+    String email,
+    List<String> permissions,) async {
     try {
       emit(MembersLoading());
 
-      await repository.addMember(workspaceId, email);
+      await repository.addMember(workspaceId, email, permissions);
 
       await getMembers(workspaceId);
     } catch (e) {

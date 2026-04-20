@@ -256,28 +256,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         listener: (context, state) async {
           if (state is ProfileLoaded) {
             _fillControllers(state.profile);
-          }
-          if (state is UpdateProfileSuccess) {
+          } else if (state is UpdateProfileSuccess) {
             showSuccessMessage(context, 'Profile updated successfully!');
             context.pop();
-          }
-          if (state is UpdateProfileFailure) {
+          } else if (state is UpdateProfileFailure) {
             showAuthError(context, state.errMessage);
-          }
-          if (state is UploadAvatarFailure) {
+          } else if (state is UploadAvatarFailure) {
             showAuthError(context, state.errMessage);
-          }
-          if (state is ChangeEmailSuccess) {
+          } else if (state is ChangeEmailSuccess) {
             setState(() {
               _isEmailStep2 = true;
               _emailSuccess = 'Code sent! Check your new email.';
               _emailError = null;
             });
-          }
-          if (state is ChangeEmailFailure) {
+          } else if (state is ChangeEmailFailure) {
             setState(() => _emailError = state.errMessage);
-          }
-          if (state is ConfirmChangeEmailSuccess) {
+          } else if (state is ConfirmChangeEmailSuccess) {
             if (mounted) {
               setState(() {
                 _isEmailStep2 = false;
@@ -288,13 +282,48 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               });
             }
 
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  behavior: SnackBarBehavior.floating, 
+                  backgroundColor: Colors.teal.shade700,
+                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 6,
+                  duration: const Duration(seconds: 3),
+                  content: const Row(
+                    children: [
+                      Icon(Icons.check_circle_outline, color: Colors.white, size: 28),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Email updated! Redirecting to login...',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+      
             await SecureStorageService().clearAll();
 
+
+            await Future.delayed(const Duration(seconds: 2));
+
+            
             if (context.mounted) {
               context.go(RouteNames.login);
             }
-          }
-          if (state is ConfirmChangeEmailFailure) {
+          } else if (state is ConfirmChangeEmailFailure) {
             setState(() => _emailError = state.errMessage);
           }
         },

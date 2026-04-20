@@ -41,14 +41,22 @@ class ApiEndpoints {
   // Workspaces
   static const workspaces = "/api/WorkSpaces";
 
-  static String workspaceById(int id) =>
-  "/api/WorkSpaces/$id";
+  static String workspaceById(int id) => "/api/WorkSpaces/$id";
+  static String editWorkspace(int id) => "/api/WorkSpaces/$id";
+  static String leaveWorkspace(int id) => "/api/WorkSpaces/$id/remove";
+  static String workspaceDashboard(int id) => "/api/WorkSpaces/$id/dashboard";
+  static const deletedWorkspaces = "/api/WorkSpaces/deleted";
+  static String restoreWorkspace(int id) => "/api/WorkSpaces/$id/restore";
 
-  static String members(int id) =>
-  "/api/WorkSpaces/$id/members";
 
-  static String addMember(int id) =>
-  "/api/WorkSpaces/$id/member";
+
+
+  static String members(int id) => "/api/WorkSpaces/$id/members";
+
+  static String addMember(int id) => "/api/WorkSpaces/$id/member";
+  static String getMemberPermissions(int id, String userId) =>
+      "/api/WorkSpaces/$id/members/$userId/permissions";
+ 
 
   static String updatePermissions(int id, String userId) =>
   "/api/WorkSpaces/$id/members/$userId/permissions";
