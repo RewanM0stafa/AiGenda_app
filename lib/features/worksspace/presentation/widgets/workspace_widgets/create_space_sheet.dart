@@ -14,10 +14,19 @@ import 'icon_picker_sheet.dart';
 
 // قائمة الألوان للـ Space (UI فقط)
 const List<Color> _spaceColors = [
-  Color(0xFF6C4AB6), Color(0xFF1D9E75), Color(0xFF4A90E2),
-  Color(0xFFE11D8E), Color(0xFFF59E0B), Color(0xFFEF4444),
-  Color(0xFF0EA5E9), Color(0xFF7C3AED), Color(0xFF0D9488),
-  Color(0xFFD97706),
+  
+    Color.fromARGB(255, 182, 74, 74),
+    Color.fromARGB(255, 6, 106, 74),
+    Color.fromARGB(255, 188, 21, 102),
+    Color.fromARGB(255, 171, 113, 147),
+    Color.fromARGB(255, 245, 11, 11),
+    Color.fromARGB(255, 79, 2, 2),
+    Color.fromARGB(255, 52, 164, 216),
+    Color.fromARGB(255, 246, 218, 92),
+    Color.fromARGB(255, 87, 173, 136),
+    Color(0xFFD97706),
+    Color.fromARGB(255, 124, 86, 190),
+    Color.fromARGB(255, 17, 5, 150),
 ];
 
 class CreateSpaceSheet extends StatefulWidget {
